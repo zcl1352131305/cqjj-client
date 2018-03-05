@@ -2,7 +2,6 @@
  * 微信推送
  * Created by Administrator on 2017/9/20 0020.
  */
-var express = require('express');
 var router = require('express-promise-router')();
 var cRequest = require("../../lib/customRequest");
 var common = require("../../lib/common");
