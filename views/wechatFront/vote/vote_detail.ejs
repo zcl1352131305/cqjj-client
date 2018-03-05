@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>投票</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <!--<div class="weui-panel__hd">投票</div>-->
+                    <div class="weui-panel__bd">
+                        <div class="weui-media-box weui-media-box_text">
+                            <h4 class="weui-media-box__title"><%=data.name%></h4>
+                            <p class="weui-media-box__desc"><%=data.describes%></p>
+                            <ul class="weui-media-box__info">
+                                <li class="weui-media-box__info__meta">时间:<%=data.dateUpdated%></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="weui-cells weui-cells_checkbox">
+
+                        <% data.options.forEach(function(option,i){%>
+                        <label class="weui-cell weui-check__label" for="s<%=i%>">
+                            <div class="weui-cell__hd">
+                                <% if(voteInfo.isVote){%>
+                                <input type="radio" class="weui-check" disabled="disabled" name="checkOpt" id="s<%=i%>" <%=voteInfo.myVote.optionId==option.id?"checked":""%> value="<%=option.id%>">
+                                <%}else{%>
+                                <input type="radio" class="weui-check" name="checkOpt" id="s<%=i%>"  value="<%=option.id%>">
+                                <%}%>
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p><%=option.optName%></p>
+                            </div>
+                            <% if(voteInfo.isVote){%>
+                            <div class="weui-cell__ft">
+                                <p>票数：<%=option.voteNum%></p>
+                            </div>
+                            <%}%>
+                        </label>
+                        <%}) %>
+
+
+                    </div>
+
+
+                    <div class="weui-btn-area">
+                        <%if(voteInfo.isVote){%>
+                        <a class="weui-btn weui-btn_primary weui-btn_disabled" id="showTooltips" >确定</a>
+                        <%}else{%>
+                        <a class="weui-btn weui-btn_primary" onclick="submitVote()" id="showTooltips" >确定</a>
+                        <%}%>
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'1'}) %>
+            </div>
+        </div>
+
+
+        <div id="toast" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+                <p class="weui-toast__content" id="toastStr">已完成</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<%- include('../public/public_js') %>
+<script type="text/javascript">
+    var userInfo,voteId;
+    $(document).ready(function () {
+        userInfo = getGlobalAttribute("userInfo");
+        voteId = '<%=data.id%>';
+    });
+
+    function submitVote(){
+
+        var checkOpt = $("input[name='checkOpt']:checked").val();
+
+        $.ajax({
+            url:"/wechatFront/wechatVote/submitVote",
+            type:"post",
+            data:{
+                optionId:checkOpt,
+                uniqueFlag:userInfo.openId,
+                voteId:voteId
+            },
+            success:function(data){
+                toast("投票成功！");
+                location.reload();
+            },
+            error:function(){
+                swal("操作失败!", "系统错误", "error");
+            }
+        });
+    }
+
+
+    function toast(str){
+        $("#toastStr").html(str);
+        var $toast = $('#toast');
+        if ($toast.css('display') != 'none') return;
+        $toast.fadeIn(100);
+        setTimeout(function () {
+            $toast.fadeOut(100);
+        }, 2000);
+    }
+
+</script>
+</body>
+</html>

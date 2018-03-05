@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+</head>
+<body>
+
+
+<%- include('public/public_js') %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var userInfo = JSON.parse('<%-JSON.stringify(data)%>');
+        setGlobalAttribute("userInfo",userInfo);
+        var module = "<%=module%>";
+        if(module == "vote"){
+            window.location.href = "/wechatFront/wechatVote/init";
+        }
+        else if(module == "activity"){
+            window.location.href = "/wechatFront/wechatActivity/init";
+        }
+        else if(module == "matrixes"){
+            window.location.href = "/wechatFront/wechatMatrixes/init";
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

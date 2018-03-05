@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>活动</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <div class="weui-cells">
+                        <% if(data!=null && data.length > 0){%>
+
+
+                        <% data.forEach(function(activity){%>
+                        <div class="weui-cell" onclick="toDetail('<%=activity.id%>')">
+                            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                                <img src="<%=basePath+activity.headImageUrl%>"  style="width: 50px;display: block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p><%=activity.activityName%></p>
+                                <p style="font-size: 13px;color: #888888;">摘要信息</p>
+                            </div>
+                        </div>
+                        <%}) %>
+
+                        <%}else{%>
+                            暂无活动
+                        <%}%>
+
+
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'2'}) %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('../public/public_js') %>
+<script>
+    function toDetail(id) {
+        location.href='/wechatFront/wechatActivity/detail?id='+id;
+    }
+</script>
+</body>
+</html>

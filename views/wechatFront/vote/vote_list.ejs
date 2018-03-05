@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>投票</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <div class="weui-cells">
+
+                        <% if(data!= null && data.length > 0){%>
+
+
+
+                        <% data.forEach(function(vote){ %>
+                        <a class="weui-cell weui-cell_access" onclick="toVoteDetail('<%=vote.id%>')" >
+                            <div class="weui-cell__bd">
+                                <p><%=vote.name%></p>
+                            </div>
+                            <div class="weui-cell__ft">
+                            </div>
+                        </a>
+                        <%}) %>
+                        <%} else{%>
+                            暂无数据
+                        <%}%>
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'1'}) %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('../public/public_js') %>
+<script>
+    function toVoteDetail(id){
+        var userInfo = getGlobalAttribute("userInfo");
+        window.location.href='/wechatFront/wechatVote/detail?id='+id+'&uniqueFlag='+userInfo.openId;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>活动详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <article class="weui-article">
+                        <h1><%=data.activityName%></h1>
+                        <section>
+                            <%if(data.headImage != null && data.headImage.length > 0){%>
+                            <p>
+                                <img src="<%=basePath+data.headImage[0].fileUrl.replace("/n1","/n4")%>" alt="">
+                            </p>
+                            <%} %>
+                            <!--<h2 class="title">时间：<%=data.activityDate %></h2>
+                            <h2 class="title">地点：<%=data.address %></h2>-->
+                            <h2 class="title">费用：<%=data.cost %></h2>
+
+                            <%-data.content%>
+
+                        </section>
+                    </article>
+                    <div class="weui-btn-area">
+                        <% if(enrolFlag == 1){%>
+                        <a class="weui-btn weui-btn_primary weui-btn_disabled" id="showTooltips" >未到报名日期</a>
+                        <%}else if(enrolFlag == 2){%>
+                        <a class="weui-btn weui-btn_primary weui-btn_disabled" id="showTooltips" >报名已结束</a>
+                        <%}else if(enrolFlag == 3){%>
+                        <a class="weui-btn weui-btn_primary weui-btn_disabled" id="showTooltips" >人数已满</a>
+                        <%}else if(enrolFlag == 4){%>
+                        <a class="weui-btn weui-btn_primary" onclick="enrol()" id="showTooltips" >我要报名</a>
+
+                        <%}%>
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'2'}) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<%- include('../public/public_js') %>
+<script type="text/javascript">
+
+    function enrol(){
+        var userInfo = getGlobalAttribute("userInfo");
+        location.href='/wechatFront/wechatActivity/enrolEdit?id=<%=data.id%>&openId='+userInfo.openId;
+    }
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>微信矩阵</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+    <style>
+        .weui-grid___img{
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+
+        }
+        .weui-grid___img img{
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50px;
+
+        }
+    </style>
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <div class="weui-grids">
+                        <% data.data.forEach(function(matrixes){%>
+                        <a href="<%=matrixes.linkUrl%>" class="weui-grid">
+                            <div class="weui-grid___img">
+                                <img src="<%=data.systemPath+matrixes.headImg%>" alt="">
+                            </div>
+                            <p class="weui-grid__label"><%=matrixes.name%></p>
+                        </a>
+                        <%}) %>
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'4'}) %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('../public/public_js') %>
+<script>
+
+</script>
+</body>
+</html>

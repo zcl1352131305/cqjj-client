@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>文章</title>
+    <!-- 引入 WeUI -->
+    <%- include('../public/public_css') %>
+
+
+</head>
+<body>
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page tabbar js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <article class="weui-article">
+                        <h1><%=data.title%></h1>
+                        <% if(showDate == 1){%>
+                        <h3>创建时间：<%=data.dateCreated%></h3>
+                        <%}%>
+
+                        <section>
+                            <%-data.content%>
+                        </section>
+                    </article>
+                </div>
+                <%- include('../public/footer_bar',{ active:'0'}) %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../public/public_js') %>
+
+</body>
+</html>

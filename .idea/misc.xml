@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="http://svn.softvan.com.cn:12306/svn/svnroot/%E9%9D%92%E5%B0%91%E5%B9%B4%E6%B4%BB%E5%8A%A8%E4%B8%AD%E5%BF%83OA/02Code/01Code/new/qsnhdzxFront" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
+</project>

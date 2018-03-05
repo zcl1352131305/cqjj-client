@@ -1,0 +1,68 @@
+
+<script type="text/javascript" src="/static/javascripts/jquery.min.js?v=2.1.4"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+<!--<script type="text/javascript" src="/static/javascripts/weui/example.js"></script>-->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //场馆介绍地址
+        $.ajax({
+            url:"/wechatFront/index/venuesUrl",
+            type:"get",
+            success:function(data){
+                $('#venuesVisitUrl').attr('href',data.systemPath+"/wechatFront/wechatFrontInfo/venuesInfo?id="+data.data.infoId);
+            },
+            error:function(){
+                swal("操作失败!", "系统错误", "error");
+            }
+        });
+    });
+
+
+
+    /**
+     * 获取当前状态
+     **/
+    function getGlobalAttribute(name) {
+        var stateText = localStorage.getItem(name) || "{}";
+        return JSON.parse(stateText);
+    }
+    /**
+     * 设置当前状态
+     **/
+    function setGlobalAttribute(name, jsonObj) {
+        jsonObj = jsonObj || {};
+        localStorage.setItem(name, JSON.stringify(jsonObj));
+    }
+
+    function uuid(len) {
+        radix = 16;
+        var chars = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+        } else {
+            // rfc4122, version 4 form
+            var r;
+
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random()*16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+
+        return uuid.join('');
+    }
+</script>

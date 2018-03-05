@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>活动报名</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <%- include('../public/public_css') %>
+
+</head>
+<body ontouchstart>
+
+<!-- 使用 -->
+<div class="container" id="container">
+    <div class="page dialog dialog js_show">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-tab__panel">
+                    <div class="weui-panel weui-panel_access">
+                        <div class="weui-panel__bd">
+                            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                                <div class="weui-media-box__hd">
+                                    <img class="weui-media-box__thumb" src="<%=basePath+data.headImage[0].fileUrl%>" alt="">
+                                </div>
+                                <div class="weui-media-box__bd">
+                                    <h4 class="weui-media-box__title"><%=data.activityName%></h4>
+                                    <p class="weui-media-box__desc">
+
+                                        费用：<%=data.cost%>/人<br>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="weui-cells__title">报名信息</div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                        <div class="weui-cell__bd">
+                            <input class="weui-input" id="userName" type="text" readonly value="">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">电话号码</label></div>
+                        <div class="weui-cell__bd">
+                            <% if(enrolInfo!= null && enrolInfo != ''){%>
+                            <input class="weui-input" readonly value="<%=enrolInfo[0].phone%>" id="phone" type="number" pattern="[0-11]*" placeholder="请输入11位手机号号">
+                            <%}else{%>
+                            <input class="weui-input" id="phone" type="number" pattern="[0-11]*" placeholder="请输入11位手机号号">
+                            <%} %>
+
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">参与人数</label></div>
+                        <div class="weui-cell__bd">
+                            <% if(enrolInfo!= null && enrolInfo != ''){%>
+                            <input class="weui-input" id="peopleNum" readonly value="<%=enrolInfo[0].peopleNum%>" type="number" pattern="[0-2]*" placeholder="请输入参与人数">
+                            <%}else{%>
+                            <input class="weui-input" id="peopleNum" type="number" pattern="[0-2]*" placeholder="请输入参与人数">
+                            <%} %>
+                        </div>
+                    </div>
+
+                    <% if(data.cost != null && data.cost != 0){%>
+                    <div class="weui-cells__title">价格信息</div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">总价（元）</label></div>
+                        <div class="weui-cell__bd">
+                            <% if(enrolInfo!= null && enrolInfo != ''){%>
+                            <input class="weui-input" id="needPay" type="text" readonly value="<%=enrolInfo[0].needPay%>">
+                            <%}else{%>
+                            <input class="weui-input" id="needPay" type="text" readonly value="">
+                            <%} %>
+                        </div>
+                    </div>
+                    <%} %>
+
+
+                    <div class="weui-btn-area">
+                        <% if(enrolInfo!= null && enrolInfo != ''){%>
+                        <a class="weui-btn weui-btn_primary weui-btn_disabled" id="showTooltips" >已报名</a>
+                        <%}else{%>
+                        <a class="weui-btn weui-btn_primary" onclick="orderCheck()" id="showTooltips" >提交</a>
+                        <%} %>
+                    </div>
+                </div>
+                <%- include('../public/footer_bar',{ active:'2'}) %>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div id="dialogs">
+        <div class="js_dialog" id="alertDialog" style="display: none;">
+            <div class="weui-mask"></div>
+            <div class="weui-dialog">
+                <div class="weui-dialog__bd" id="alertDialogMsg">11111</div>
+                <div class="weui-dialog__ft">
+                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">知道了</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+<%- include('../public/public_js') %>
+<script type="text/javascript"  src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="/static/javascripts/plugins/md5/jquery.md5.min.js"></script>
+<script type="text/javascript">
+    var userInfo,appId='<%=wechatInfo.appId%>';
+    $(document).ready(function () {
+        userInfo = getGlobalAttribute("userInfo");
+        $("#userName").val(userInfo.nickName);
+
+        $.ajax({
+            url:"/proxy/wechat/portal/getSignature",
+            type:"get",
+            data:{
+                url:"<%=systemPath%>/wechatFront/wechatActivity/enrolEdit?id=<%=data.id%>"
+            },
+            success:function(data){
+                wechatConfig(data.data);
+            },
+            error:function(){
+                alert("操作失败!");
+            }
+        });
+    });
+
+    function wechatConfig(config){
+        wx.config({
+            appId: config.appId, // 必填，公众号的唯一标识
+            timestamp: config.timestamp, // 必填，生成签名的时间戳
+            nonceStr: config.nonceStr, // 必填，生成签名的随机串
+            signature: config.signature,// 必填，签名，见附录1
+            jsApiList: [ // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                "chooseWXPay"
+            ]
+        });
+
+        wx.error(function(res){
+            alert(JSON.stringify(res));
+        });
+
+    }
+
+    $("#peopleNum").on("input",function(){
+        var price = parseFloat("<%=data.cost%>");
+        var peopleNum = parseFloat($(this).val());
+        $("#needPay").val(price*peopleNum);
+
+    });
+
+    //订单提交前验证是否提交过
+    function orderCheck(){
+        var phone = $("#phone").val();
+        var peopleNum = $("#peopleNum").val();
+        if(null == phone || phone == ''){
+            showAlert("电话号码不能为空！");
+            return;
+        }
+        if(null == peopleNum || peopleNum == ''){
+            showAlert("参与人数不能为空！");
+            return;
+        }
+        if(parseInt(peopleNum) < 1 ){
+            showAlert("参与人数不能小于一位！");
+            return;
+        }
+
+        var eachCost = "<%=data.cost%>";
+
+        var activityId = "<%=data.id%>";
+        $.ajax({
+            url:"/wechatFront/wechatActivity/enrolCheck",
+            type:"get",
+            data:{
+                activityId:activityId,
+                openId:userInfo.openId
+            },
+            success:function(data){
+                if(data.data != null && data.data.length > 0){
+                    showAlert("已报名该活动！");
+                }
+                else{
+                    if(eachCost != null && parseFloat(eachCost) > 0){
+                        submitEnrolWithPay();
+                    }
+                    else{
+                        submitEnrol();
+                    }
+
+                }
+            },
+            error:function(){
+                alert("查询失败!");
+            }
+        });
+    }
+
+    //提交报名（没有支付）
+    function submitEnrol(){
+        var activityId = "<%=data.id%>";
+        $.ajax({
+            url:"/wechatFront/wechatActivity/saveEnrol",
+            type:"post",
+            data:{
+                id:uuid(32),
+                activityId:activityId,
+                openId:userInfo.openId,
+                userName:$("#userName").val(),
+                phone:$("#phone").val(),
+                peopleNum:$("#peopleNum").val(),
+                needPay:$("#needPay").val()
+            },
+            success:function(data){
+                showAlert("报名成功！");
+            },
+            error:function(){
+                alert("操作失败!");
+            }
+        });
+    }
+
+    //提交报名(有支付)
+    function submitEnrolWithPay(){
+        var activityId = "<%=data.id%>";
+        $.ajax({
+            url:"/wechatFront/wechatActivity/saveEnrolWithPay",
+            type:"post",
+            data:{
+                id:uuid(32),
+                activityId:activityId,
+                openId:userInfo.openId,
+                userName:$("#userName").val(),
+                phone:$("#phone").val(),
+                peopleNum:$("#peopleNum").val(),
+                needPay:$("#needPay").val()
+            },
+            success:function(data){
+                var wxPay = {
+                    appId:data.data.orderResult.appid,
+                    timestamp:getTimeStamp(),
+                    nonceStr:uuid(32),
+                    package:'prepay_id='+data.data.orderResult.prepayId,
+                    signType:'MD5',
+                    key:data.data.mchKey
+                }
+                wxPay.paySign = getPaySign(wxPay);
+
+                wechatPay(wxPay);
+            },
+            error:function(){
+                alert("操作失败!");
+            }
+        });
+    }
+
+
+
+    function wechatPay(wxPay){
+        wx.ready(function() { // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            wx.chooseWXPay({
+                appId: wxPay.appId,
+                timestamp: wxPay.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                nonceStr: wxPay.nonceStr, // 支付签名随机串，不长于 32 位
+                package: wxPay.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: wxPay.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: wxPay.paySign, // 支付签名
+                success: function(res) {
+                    // 支付成功后的回调函数
+                    if (res.errMsg == "chooseWXPay:ok") {
+                        //支付成功
+                        showAlert("支付成功！");
+                        $('#dialogs').on('click', '.weui-dialog__btn', function(){
+                            setTimeout(function(){
+                                window.location.reload();
+                            },100);
+                        });
+                    } else {
+                        showAlert("支付失败！");
+                    }
+                },
+                cancel: function(res) {
+                    //支付取消
+                    showAlert("支付取消！");
+                }
+            });
+        });
+    }
+
+    function getPaySign(wxPay){
+        var a = "appId="+wxPay.appId+"&nonceStr="+wxPay.nonceStr+"&package="+wxPay.package+"&signType="+wxPay.signType+"&timeStamp="+wxPay.timestamp;
+        var stringSignTemp = a + '&key='+wxPay.key;
+        return $.md5(stringSignTemp).toUpperCase();
+    }
+
+
+
+
+
+    function getTimeStamp() {
+        var date = new Date();
+        return date.getTime();
+    }
+
+
+
+    //对话框相关
+    function showAlert(msg){
+        $("#alertDialogMsg").html(msg);
+        $("#alertDialog").fadeIn(200);
+    }
+
+    $('#dialogs').on('click', '.weui-dialog__btn', function(){
+        $(this).parents('.js_dialog').fadeOut(200);
+    });
+
+
+
+</script>
+</body>
+</html>
