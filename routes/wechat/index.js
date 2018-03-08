@@ -23,7 +23,7 @@ router.get('/init', function (req, res, next) {
             method: 'GET'
         });
     }).then(function (data) {
-        logger.error(JSON.stringify(data));
+        logger.error("----"+JSON.stringify(data));
         data.module = req.query.module;
         res.render(ejsPrefix+"index",data);
     });

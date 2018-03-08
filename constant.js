@@ -5,8 +5,7 @@
 //接口系统地址
 var basePath = "http://127.0.0.1:8050";
 exports.BASE_PATH = basePath;
-exports.REAL_PATH = "http://x45m7m.natappfree.cc";
-
+exports.SERVER_PATH = "http://etfuif.natappfree.cc";
 //本系统地址
-exports.SYSTEM_INDEX = "http://127.0.0.1:3000";
+exports.SYSTEM_PATH = "http://zoucl.s1.natapp.cc";
 

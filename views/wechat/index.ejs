@@ -12,12 +12,11 @@
 </head>
 <body>
 
-
-<script type="text/javascript" src="/static/javascripts/jquery-2.1.0.min.js"></script>
+<%- include('public/public_js') %>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var userInfo = JSON.parse('<%-JSON.stringify(data)%>');
+        var userInfo = '<%-JSON.stringify(result)%>';
         setGlobalAttribute("userInfo",userInfo);
         var module = "<%=module%>";
         if(module == "furnitureRecycle"){

@@ -30,7 +30,8 @@ var app = express()
 
 //微信用户端
 var wechatIndex = require('./routes/wechat/index');
-var wechatUser = require('./routes/wechat/user');
+var qiniu = require('./routes/qiniu');
+var wechatUser = require('./routes/wechat/user/fnRecycle');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,20 +48,20 @@ app.use(express.static( path.join(__dirname, 'public')));
 
 
 //微信服务号
-app.use("" +
-    "", wechatIndex);
-app.use("/wechat/user", wechatUser);
+app.use("/wechat/index", wechatIndex);
+app.use("/wechat/user/fnRecycle", wechatUser);
+app.use("/qiniu", qiniu);
 
 
 
-/*//反向代理 所有在/proxy/下的路由将被拦截
-app.use('/proxy/**', function (req, res) {
+//反向代理 所有在/proxy/下的路由将被拦截0
+app.use('/cqjjTrade/wechat/portal/**', function (req, res) {
     var pathname = url.parse(req.originalUrl).pathname;
     logger.debug(constant.BASE_PATH+ pathname);
     proxy.web(req, res, { target: constant.BASE_PATH+ pathname });
 });
 
-app.use('/upload/!**', function (req, res) {
+/*app.use('/upload/!**', function (req, res) {
     var pathname = url.parse(req.originalUrl).pathname;
     logger.debug(constant.BASE_PATH+ pathname);
     proxy.web(req, res, { target: constant.BASE_PATH+ pathname });

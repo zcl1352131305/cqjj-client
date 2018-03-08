@@ -1,0 +1,142 @@
+
+<script type="text/javascript" src="/static/javascripts/jquery-2.1.0.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="/static/javascripts/weui/wechat-base.js"></script>
+<!--<script type="text/javascript" src="/static/javascripts/weui/example.js"></script>-->
+<script type="text/javascript">
+
+    function getQiniuHost(){
+        return "http://p3npuv0x6.bkt.clouddn.com/"
+    }
+
+    $(document).ready(function () {
+        var userInfo = getGlobalAttribute("userInfo");
+        if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
+            userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
+            if(!isEmpty(userInfo) && userInfo != '{}'){
+                setGlobalAttribute("userInfo",JSON.parse(userInfo));
+            }
+        }
+    });
+
+    //初始化微信jssdk配置
+    function initWechatConfig(basePath, wxconfigUrl, successHandel){
+        $.ajax({
+            url:"/cqjjTrade/wechat/portal/getSignature",
+            type:"get",
+            data:{
+                url:wxconfigUrl
+            },
+            success:function(data){
+                wechatConfig(data.result.signature);
+                successHandel(data.result.accessToken)
+            },
+            error:function(e){
+                alert("操作失败!"+JSON.stringify(e));
+            }
+        });
+    }
+
+    function wechatConfig(config){
+        wx.config({
+            debug: false,
+            appId: config.appId, // 必填，公众号的唯一标识
+            timestamp: config.timestamp, // 必填，生成签名的时间戳
+            nonceStr: config.nonceStr, // 必填，生成签名的随机串
+            signature: config.signature,// 必填，签名，见附录1
+            jsApiList: [ // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                'chooseImage', 'uploadImage'
+            ]
+        });
+        wx.error(function(res){
+            alert(JSON.stringify(res));
+        });
+    }
+
+
+    /**
+     * 获取当前状态
+     **/
+    function getGlobalAttribute(name) {
+        var stateText = localStorage.getItem(name) || "{}";
+        return JSON.parse(stateText);
+    }
+    /**
+     * 设置当前状态
+     **/
+    function setGlobalAttribute(name, jsonObj) {
+        jsonObj = jsonObj || {};
+        localStorage.setItem(name, JSON.stringify(jsonObj));
+    }
+
+    function isEmpty(obj){
+        return (obj == null || obj == '')
+    }
+
+    function uuid(len) {
+        radix = 16;
+        var chars = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random()*radix];
+        } else {
+            // rfc4122, version 4 form
+            var r;
+
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random()*16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+
+        return uuid.join('');
+    }
+
+
+
+    function encode64(input) {
+        var keyStr = "ABCDEFGHIJKLMNOP" +
+            "QRSTUVWXYZabcdef" +
+            "ghijklmnopqrstuv" +
+            "wxyz0123456789+/" +
+            "=";
+        input = escape(input);//注意escape（）函数
+        var output = "";
+        var chr1, chr2, chr3 = "";
+        var enc1, enc2, enc3, enc4 = "";
+        var i = 0;
+        do {
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
+            output = output +
+                keyStr.charAt(enc1) +
+                keyStr.charAt(enc2) +
+                keyStr.charAt(enc3) +
+                keyStr.charAt(enc4);
+            chr1 = chr2 = chr3 = "";
+            enc1 = enc2 = enc3 = enc4 = "";
+        } while (i < input.length);
+        return output;
+    }
+</script>
