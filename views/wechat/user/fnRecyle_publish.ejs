@@ -32,7 +32,7 @@
     <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
     <%} %>
 
-    <h1>家具回收</h1>
+    <h1>家具回收发布</h1>
 </header>
 
 <div class="wechat-content">
@@ -43,9 +43,9 @@
         <div class="weui-cells__title">家具信息</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">回收标题</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">发布标题</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" name="title" type="text" value="<%=recycle.title%>" placeholder="请输入标题" />
+                    <input class="weui-input" id="title" name="title" type="text" value="<%=recycle.title%>" placeholder="请输入标题" />
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">回收价格</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" name="price" type="number" value="<%=recycle.price%>" placeholder="请输入价格" />
+                    <input class="weui-input" id="price" name="price" type="number" value="<%=recycle.price%>" placeholder="请输入价格" />
                 </div>
             </div>
 
@@ -103,7 +103,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" name="contact" type="text" value="<%=recycle.contact%>" placeholder="请输入姓名" />
+                    <input class="weui-input" id="contact" name="contact" type="text" value="<%=recycle.contact%>" placeholder="请输入姓名" />
                 </div>
             </div>
 
@@ -117,13 +117,13 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" name="phone" type="number" value="<%=recycle.phone%>" placeholder="请输入联系电话" />
+                    <input class="weui-input" id="phone" name="phone" type="number" value="<%=recycle.phone%>" placeholder="请输入联系电话" />
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">联系地址</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" name="address" type="number" value="<%=recycle.phone%>" placeholder="请输入联系地址" />
+                    <input class="weui-input" id="address" name="address" type="text" value="<%=recycle.address%>" placeholder="请输入联系地址" />
                 </div>
             </div>
 
@@ -185,6 +185,7 @@
 
 
         var imgUpload = function(localIds){
+            var imgs = $("#uploaderFiles").children().length
             $loadingToast.fadeIn(100)
             var localId = localIds.shift();
             wx.uploadImage({
@@ -192,14 +193,19 @@
                 isShowProgressTips: 0, // 默认为1，显示进度提示
                 success: function (res) {
                     var serverId = res.serverId; // 返回图片的服务器端ID
-                    uploadToQiniu(serverId,function () {
-                        if (localIds.length > 0) {
-                            imgUpload(localIds);
-                        }
-                        else{
-                            $loadingToast.fadeOut(100)
-                        }
-                    });
+                    if(imgs < 5){
+                        uploadToQiniu(serverId,function () {
+                            if (localIds.length > 0) {
+                                imgUpload(localIds);
+                            }
+                            else{
+                                $loadingToast.fadeOut(100)
+                            }
+                        });
+                    }
+                    else{
+                        $loadingToast.fadeOut(100)
+                    }
                 }
             });
         }
@@ -235,14 +241,72 @@
         }
 
         $("#showTooltips").on("click",function(){
-          $("#form").submit()
+            if(check()){
+                $("#form").submit()
+            }
         })
-
-
 
         imgOption();
     });
 
+    function check(){
+        var title = $("#title").val();
+        var type = $("#furnitureTypeName").val();
+        var price = $("#price").val();
+        var detailInfo = $("#description").val();
+
+        var imgs = $("#uploaderFiles").children().length
+        var contact = $("#contact").val();
+        var phone = $("#phone").val();
+        var address = $("#address").val();
+        if(emptyCheck(title, "标题不能为空！")) return false;
+        if(emptyCheck(type, "类型不能为空！")) return false;
+        if(emptyCheck(detailInfo, "描述不能为空！")) return false;
+        if(emptyCheck(contact, "联系人不能为空！")) return false;
+        if(emptyCheck(phone, "电话不能为空！")) return false;
+        if(maxLengthCheck(title,50,"标题过长！")) return false;
+        if(maxLengthCheck(detailInfo,300,"描述过长！请控制300字内！")) return false;
+        if(maxLengthCheck(price,50,"价格不合理！")) return false;
+        if(maxLengthCheck(contact,50,"联系人名称过长！")) return false;
+        if(phone.length != 11){
+            $.toptip("请输入11位手机号码！", 'error');
+            return false;
+        }
+        if(imgs <= 0){
+            $.toptip("请上传至少一张图片！", 'error');
+            return false;
+        }
+        if(imgs > 5){
+            $.toptip("图片最多上传5张！", 'error');
+            return false;
+        }
+
+        if(maxLengthCheck(address,100,"联系地址过长！")) return false;
+
+        return true;
+    }
+
+    function emptyCheck(column, alert){
+
+        if(isEmpty(column)){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function maxLengthCheck(column, maxLength, alert){
+        if(column.length > maxLength){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        return false;
+    }
+
+
+    //图片操作
     function imgOption(){
         $("#uploaderFiles li").on("click",function(){
             var $img = $(this);
