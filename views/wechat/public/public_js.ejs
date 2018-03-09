@@ -9,16 +9,6 @@
         return "http://p3npuv0x6.bkt.clouddn.com/"
     }
 
-    $(document).ready(function () {
-        var userInfo = getGlobalAttribute("userInfo");
-        if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
-            userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
-            if(!isEmpty(userInfo) && userInfo != '{}'){
-                setGlobalAttribute("userInfo",JSON.parse(userInfo));
-            }
-        }
-    });
-
     //初始化微信jssdk配置
     function initWechatConfig(basePath, wxconfigUrl, successHandel){
         $.ajax({

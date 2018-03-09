@@ -156,6 +156,14 @@
 
     var accessToken;
     $(document).ready(function () {
+        var userInfo = getGlobalAttribute("userInfo");
+        if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
+            userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
+            if(!isEmpty(userInfo) && userInfo != '{}'){
+                setGlobalAttribute("userInfo",JSON.parse(userInfo));
+            }
+        }
+
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })

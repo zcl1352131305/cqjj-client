@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+
+</head>
+
+
+<body>
+
+<header class="wechat-header">
+    <h1>登陆</h1>
+</header>
+
+<div class="wechat-content">
+    <form id="form" action="/wechat/merchant/home/login" method="post">
+        <input type="hidden" id="id" name="id" value="<%=id%>">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="password" name="password" type="text" value="" placeholder="请输入密码" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+        </div>
+
+    </form>
+</div>
+
+
+
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="https://unpkg.com/qiniu-js@2.1.2/dist/qiniu.min.js"></script>
+<script type="text/javascript" src="//unpkg.com/crypto-js/crypto-js.js"></script>
+<script>
+
+
+    var accessToken;
+    $(document).ready(function () {
+        $("#showTooltips").on("click",function(){
+            if(check()){
+                $("#form").submit()
+            }
+        })
+    });
+
+
+
+
+    function check(){
+        var password = $("#password").val();
+        if(null == password || password == '' || password.length != 6){
+            $.toptip("请输入6位密码！", 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+</html>

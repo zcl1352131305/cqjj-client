@@ -31,7 +31,8 @@ var app = express()
 //微信用户端
 var wechatIndex = require('./routes/wechat/index');
 var qiniu = require('./routes/qiniu');
-var wechatUser = require('./routes/wechat/user/fnRecycle');
+var fnRecycle = require('./routes/wechat/user/fnRecycle');
+var merchantHome = require('./routes/wechat/merchant/home');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -49,7 +50,8 @@ app.use(express.static( path.join(__dirname, 'public')));
 
 //微信服务号
 app.use("/wechat/index", wechatIndex);
-app.use("/wechat/user/fnRecycle", wechatUser);
+app.use("/wechat/user/fnRecycle", fnRecycle);
+app.use("/wechat/merchant/home", merchantHome);
 app.use("/qiniu", qiniu);
 
 
