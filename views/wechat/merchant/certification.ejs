@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .weui-uploader__files img {
+            width: 100%;
+            height: 100%
+        }
+        .weui-uploader__files li{
+            border: 1px solid #ddd;
+        }
+        .weui-cells__title{
+            font-size: 14px;
+        }
+        .weui-cell{
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1>商户认证</h1>
+</header>
+
+<div class="wechat-content">
+    <form id="form" action="/wechat/merchant/home/login" method="post">
+
+        <% if(merchantInfo.auditState == 1 || merchantInfo.auditState == '1'){%>
+            <div class="weui-cells__title">审核中</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea id="description" class="weui-textarea" style="font-size: 14px;color: #FF7F00;" rows="3">商户认证正在审核中，请耐心等待回复！</textarea>
+                    </div>
+                </div>
+            </div>
+        <% } else if(merchantInfo.auditState == 2 || merchantInfo.auditState == '2'){%>
+            <div class="weui-cells__title">审核失败</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea id="description" class="weui-textarea" style="color: #FF4040;font-size: 12px;" rows="3"><%=merchantInfo.auditRefuseReason%></textarea>
+                    </div>
+                </div>
+            </div>
+        <% } else if(merchantInfo.auditState == 3 || merchantInfo.auditState == '3'){%>
+            <div class="weui-cells__title">审核成功</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea id="description" class="weui-textarea" style="color:#76EE00;font-size: 12px;" rows="3">商户信息成功认证！</textarea>
+                    </div>
+                </div>
+            </div>
+        <% }%>
+
+
+
+
+
+
+
+        <div class="weui-cells__title">商户信息</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">商户名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="merchantName" value="<%=merchantInfo.merchantName%>" type="text" placeholder="需与营业执照名称一致" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">注册号</label></div>
+                <div class="weui-cell__bd">
+                    <input id="merchantCreditCode" value="<%=merchantInfo.merchantCreditCode%>" class="weui-input" type="text" placeholder="注册号或统一社会信用代码" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="contact" type="text" value="<%=merchantInfo.contact%>" placeholder="请输入联系人" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="phone" type="text" value="<%=merchantInfo.phone%>" placeholder="请输入联系电话" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">商户地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="address" type="text" value="<%=merchantInfo.address%>" placeholder="请输入商户地址" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="email" value="<%=merchantInfo.email%>" type="text" placeholder="请输入邮箱" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%>  />
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 图片上传 -->
+        <div class="weui-cells__title">营业执照</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                                <!--<li class="weui-uploader__file">
+                                    <img src="http://img.taopic.com/uploads/allimg/120727/201995-120HG1030762.jpg" />
+                                </li>-->
+                                <% if(null != merchantInfo.merchantBusinessLicense && merchantInfo.merchantBusinessLicense != ''){ %>
+                                    <li class="weui-uploader__file">
+                                        <img src="<%=merchantInfo.merchantBusinessLicense%>" />
+                                        <input type="hidden" id="furnitureImg" value="<%=merchantInfo.merchantBusinessLicense%>">
+                                    </li>
+                                <% } %>
+
+                            </ul>
+                            <% if(merchantInfo.auditState != 1 && merchantInfo.auditState != '1'){%>
+                            <div class="weui-uploader__input-box">
+                                <div id="addImg" class="weui-uploader__input"></div>
+                            </div>
+                            <% }%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if(merchantInfo.auditState != 1 && merchantInfo.auditState != '1'){%>
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">提交认证</a>
+        </div>
+        <% }%>
+
+
+    </form>
+
+
+    <div id="loadingToast" style="display:none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast" style="visibility: visible;opacity: 1">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">图片上传中...</p>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="https://unpkg.com/qiniu-js@2.1.2/dist/qiniu.min.js"></script>
+<script type="text/javascript" src="//unpkg.com/crypto-js/crypto-js.js"></script>
+<script>
+
+
+    var accessToken;
+    $(document).ready(function () {
+
+        initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
+            accessToken = token;
+        })
+
+    });
+
+    //微信图片上传到七牛
+    wx.ready(function() {
+
+        var $loadingToast = $("#loadingToast")
+        $("#addImg").on("click",function(){
+
+            //uploadToQiniu();
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    imgUpload(localIds);
+                }
+            });
+        });
+
+
+        var imgUpload = function(localIds){
+            var imgs = $("#uploaderFiles").children().length
+            $loadingToast.fadeIn(100)
+            var localId = localIds.shift();
+            wx.uploadImage({
+                localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 0, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    if(imgs < 1){
+                        uploadToQiniu(serverId,function () {
+                            if (localIds.length > 0) {
+                                imgUpload(localIds);
+                            }
+                            else{
+                                $loadingToast.fadeOut(100)
+                            }
+                        });
+                    }
+                    else{
+                        $loadingToast.fadeOut(100)
+                    }
+                }
+            });
+        }
+        var uploadToQiniu = function(serverId,success){
+            $.ajax({
+                url:"/qiniu/fetch?accessToken="+accessToken+"&serverId="+serverId,
+                type:"get",
+                success:function(data){
+                    var imgPath = getQiniuHost()+data.key
+                    var str = "";
+                    str += '<li class="weui-uploader__file" data-imgPath="'+imgPath+'">'
+                    str += '<img src="'+imgPath+'" />';
+                    str += '<input type="hidden" id="merchantBusinessLicense" value="'+imgPath+'">';
+                    str += '</li>';
+                    $("#uploaderFiles").append(str);
+                    imgOption();
+                    success();
+
+                },
+                error:function(e){
+                    alert("操作失败!"+JSON.stringify(e));
+                }
+            });
+        }
+
+
+
+        $("#showTooltips").on("click",function(){
+            if(check()){
+                merchantAjax({
+                    url:"/wechat/merchant/certification/saveOrUpdate",
+                    type:"post",
+                    data:{
+                        id:"<%=merchantInfo.id%>",
+                        sysUserId: '<%=adminId%>',
+                        merchantName: $("#merchantName").val(),
+                        merchantCreditCode:$("#merchantCreditCode").val(),
+                        merchantBusinessLicense:$("#merchantBusinessLicense").val(),
+                        contact:$("#contact").val(),
+                        phone:$("#phone").val(),
+                        email:$("#email").val(),
+                        address:$("#address").val(),
+                        auditState:"1"
+
+                    },
+                    success:function(data){
+                        location.href="/wechat/merchant/home/main"
+                    },
+                })
+            }
+        })
+
+        imgOption();
+    });
+    
+    function check() {
+        return true;
+    }
+
+    //图片操作
+    function imgOption(){
+        $("#uploaderFiles li").on("click",function(){
+            var $img = $(this);
+            $.actions({
+                actions: [{
+                    text: "删除",
+                    className: "color-danger",
+                    onClick: function() {
+                        if($img.attr("data-imgPath") == $("#headImg").val()){
+                            $("#headImg").val("")
+                        }
+                        $img.remove()
+                    }
+                }]
+            });
+        });
+    }
+
+
+
+
+
+
+</script>
+</html>

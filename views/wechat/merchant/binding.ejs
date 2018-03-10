@@ -17,7 +17,7 @@
 <body>
 
 <header class="wechat-header">
-    <h1>登陆</h1>
+    <h1>商户绑定</h1>
 </header>
 
 <div class="wechat-content">
@@ -25,16 +25,27 @@
         <input type="hidden" id="id" name="id" value="<%=id%>">
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">登陆密码</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">商户账户</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="password" name="password" type="password" value="" placeholder="请输入6位登陆密码" />
+                    <input id="account" class="weui-input" type="text" placeholder="请输入账户（手机号）" />
                 </div>
             </div>
 
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">登陆密码</label></div>
+                <div class="weui-cell__bd">
+                    <input id="password" class="weui-input" type="text" placeholder="输入密码" />
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">
+            您即将绑定商户账号至您的微信号，绑定后您可以快速登陆商户后台，若没有商户号，请
+            <a href="" style="color: #1296db;">注册商户号</a>
+            若忘记密码，请<a href="" style="color: #1296db;">找回密码</a>
         </div>
 
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确认绑定</a>
         </div>
 
     </form>
@@ -51,25 +62,19 @@
 
 
     $(document).ready(function () {
-        var id = '<%=id%>';
-        if(null == id || '' == id){
-            var wechatUserInfo = getGlobalAttribute("wechatUserInfo");
-            $("#id").val(wechatUserInfo.id);
-        }
         $("#showTooltips").on("click",function(){
             if(check()){
-                //$("#form").submit()
                 $.ajax({
-                    url:"/wechat/merchant/home/login",
+                    url:"/wechat/merchant/home/binding",
                     type:"post",
                     data:{
-                        id:$("#id").val(),
+                        wechatUserId:$("#id").val(),
+                        username:$("#account").val(),
                         password:$("#password").val()
                     },
                     success:function(data){
                         if(data.code == 0 || data.code == '0'){
-                            setGlobalAttribute("wechatUserInfo",data.wechatUserInfo)
-                            location.href="/wechat/merchant/home/main"
+                            location.href="/wechat/merchant/home/init?wechatUserId="+$("#id").val()
                         }
                         else{
                             $.toptip(data.msg, 'error');
@@ -87,7 +92,12 @@
 
 
     function check(){
+        var account = $("#account").val();
         var password = $("#password").val();
+        if(null == account || account == '' || account.length != 11){
+            $.toptip("请输入正确的账号！", 'error');
+            return false;
+        }
         if(null == password || password == '' || password.length != 6){
             $.toptip("请输入6位密码！", 'error');
             return false;

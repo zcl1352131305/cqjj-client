@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .weui-tab{
+            position:inherit
+        }
+        .weui-tabbar{
+            background: #fff;
+        }
+        .merchant_title{
+            width:100%;
+            height: 150px;
+            background: #fff;
+            text-align: center;
+        }
+        .merchant_title img{
+            margin-top: 20px;
+            width: 70px;
+            border-radius: 100%;
+        }
+        .merchant_title p.name{
+            font-weight: bold;
+            color: #444444;
+        }
+        .merchant_title p.account{
+            font-size: 12px;
+            color: #999;
+        }
+
+        .weui-grids{
+            background: #fff;
+        }
+
+
+        .grey-area{
+            background: #fafafa;
+            width: 100%;
+            height: 20px;
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+        }
+
+        .grids-title{
+            color: #666;
+            background: #fff;
+            height: 40px;
+            font-size: 14px;
+            padding-left: 10px;
+            font-weight: bold;
+            line-height: 40px;
+        }
+        .grids-title img{
+            margin-top: 10px;
+            width: 20px;
+            float: left;
+        }
+        .grids-title div{
+            margin-left: 10px;
+            float: left;
+        }
+        .weui-grid:after, .weui-grid:before{
+            right: auto;
+            bottom: auto;
+            content: none;
+        }
+        body{
+            background: #fafafa;
+        }
+        .weui-grid__icon+.weui-grid__label{
+            font-size: 13px;
+        }
+    </style>
+
+
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <h1>商户首页</h1>
+</header>
+
+<div class="wechat-content">
+    <div class="weui-tab">
+        <div class="weui-tab__bd">
+            <div class="merchant_title">
+                <img id="headImg" src="" />
+                <p id="nickname" class="name"></p>
+                <p id="bindingUser" class="account"></p>
+            </div>
+            <div class="grey-area"></div>
+            <div class="grids-title">
+                <img src="/static/images/icon/icon-sofa.png" />
+                <div>家具收售</div>
+            </div>
+            <div class="weui-grids">
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-publish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">发布家具</p>
+                </a>
+
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-recycle.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">回收家具</p>
+                </a>
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-my_publish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">我的发布</p>
+                </a>
+            </div>
+
+
+            <div class="grey-area"></div>
+            <div class="grids-title">
+                <img src="/static/images/icon/icon-merchant.png" />
+                <div>商户管理</div>
+            </div>
+            <div class="weui-grids">
+                <a id="merchantInfoUpd" href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-change.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">商户认证</p>
+                </a>
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-phone.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">更换手机号</p>
+                </a>
+
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-password.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">解除绑定</p>
+                </a>
+            </div>
+
+            <div class="grey-area"></div>
+            <div class="grids-title">
+                <img src="/static/images/icon/icon-more.png" />
+                <div>更多功能</div>
+            </div>
+            <div class="weui-grids">
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-talk.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">我要吐槽</p>
+                </a>
+                <a href="javascript:;" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-more_dot.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">敬请期待...</p>
+                </a>
+
+            </div>
+
+
+        </div>
+
+        <!--<div class="weui-tabbar">
+            <a id="main" href="javascript:;" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/static/images/icon/icon-main.png" alt="">
+                </div>
+                <p class="weui-tabbar__label" style="color: #1296db;">首页</p>
+            </a>
+            <a id="recycle" href="javascript:;" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/static/images/icon/icon-recyle-o.png" alt="">
+                </div>
+                <p class="weui-tabbar__label">旧家具回收</p>
+            </a>
+            <a id="merchant" href="javascript:;" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/static/images/icon/icon-store-o.png" alt="">
+                </div>
+                <p class="weui-tabbar__label">我的商户</p>
+            </a>
+        </div>-->
+    </div>
+</div>
+
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="https://unpkg.com/qiniu-js@2.1.2/dist/qiniu.min.js"></script>
+<script type="text/javascript" src="//unpkg.com/crypto-js/crypto-js.js"></script>
+<script>
+
+
+    var accessToken;
+    $(document).ready(function () {
+        checkIsCertification();
+    });
+
+    //检验账户是否验证
+    function checkIsCertification(){
+        var wechatUserInfo = getGlobalAttribute("wechatUserInfo");
+        $("#headImg").attr("src",wechatUserInfo.headImgUrl);
+        $("#nickname").html(wechatUserInfo.nickName);
+        $("#bindingUser").html("当前绑定账号："+wechatUserInfo.adminUsername)
+        merchantAjax({
+            url:"/wechat/merchant/certification/checkIsCertification",
+            type:"get",
+            data:{
+                adminId:wechatUserInfo.merchantAdminId
+            },
+            success:function(data){
+                $("#merchantInfoUpd").attr("href",'/wechat/merchant/certification/edit?adminId='+wechatUserInfo.merchantAdminId)
+                if(null == data.result || JSON.stringify(data.result) == '{}'){
+                    $.alert("当前商户信息未认证，请前往认证页面进行认证！");
+                }
+                else{
+                    //认证成功才能作的操作
+                    if(data.result.auditState == '3' || data.result.auditState == 3){
+
+                    }
+                }
+            },
+        })
+    }
+
+
+
+
+
+    function check(){
+        var password = $("#password").val();
+        if(null == password || password == '' || password.length != 6){
+            $.toptip("请输入6位密码！", 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+</html>

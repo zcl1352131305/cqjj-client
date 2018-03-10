@@ -33,6 +33,7 @@ var wechatIndex = require('./routes/wechat/index');
 var qiniu = require('./routes/qiniu');
 var fnRecycle = require('./routes/wechat/user/fnRecycle');
 var merchantHome = require('./routes/wechat/merchant/home');
+var merchantCertification = require('./routes/wechat/merchant/certification');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -52,6 +53,7 @@ app.use(express.static( path.join(__dirname, 'public')));
 app.use("/wechat/index", wechatIndex);
 app.use("/wechat/user/fnRecycle", fnRecycle);
 app.use("/wechat/merchant/home", merchantHome);
+app.use("/wechat/merchant/certification", merchantCertification);
 app.use("/qiniu", qiniu);
 
 

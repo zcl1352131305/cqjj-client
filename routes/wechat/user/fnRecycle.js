@@ -25,7 +25,7 @@ router.get('/edit', function (req, res, next) {
     //是否是从菜单跳转而来
     if(isFromMenu== 'true'){
         return Promise.try(function () {
-            return cRequest.sendRequest(req, res, {
+            return cRequest.sendRequest(req,  res, {
                 url: constant.BASE_PATH + "/cqjjTrade/wechat/auth" + "/OAuth2",
                 qs: {
                     code: req.query.code

@@ -27,6 +27,40 @@
         });
     }
 
+    function merchantAjax(param){
+        $.ajax({
+            url:param.url,
+            type:param.type,
+            data:param.data,
+            success:function(data){
+                if(data.code == 401 || data.code == '401'){
+                    $.toptip("登陆信息失效！", 'error');
+                    setTimeout(function(){
+                       location.href = '/wechat/merchant/home/init';
+                    },2000)
+                }
+                else if(data.code == 402 || data.code == '402'){
+                    $.toptip("登陆信息失效！", 'error');
+                    setTimeout(function(){
+                        location.href = '/wechat/merchant/home/init';
+                    },2000)
+                }
+                else if(data.code == 403 || data.code == '403'){
+                    $.toptip("未被授权访问此页！", 'error');
+                    setTimeout(function(){
+                        location.href = '/wechat/merchant/home/main';
+                    },2000)
+                }
+                else{
+                    param.success(data);
+                }
+            },
+            error:function(e){
+                alert("操作失败!"+JSON.stringify(e));
+            }
+        });
+    }
+
     function wechatConfig(config){
         wx.config({
             debug: false,
