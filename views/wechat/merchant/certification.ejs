@@ -42,7 +42,7 @@
             <div class="weui-cells weui-cells_form">
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <textarea id="description" class="weui-textarea" style="font-size: 14px;color: #FF7F00;" rows="3">商户认证正在审核中，请耐心等待回复！</textarea>
+                        <textarea id="description" readonly class="weui-textarea" style="font-size: 14px;color: #FF7F00;" rows="3">商户认证正在审核中，请耐心等待回复！</textarea>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
             <div class="weui-cells weui-cells_form">
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <textarea id="description" class="weui-textarea" style="color: #FF4040;font-size: 12px;" rows="3"><%=merchantInfo.auditRefuseReason%></textarea>
+                        <textarea id="description" readonly class="weui-textarea" style="color: #FF4040;font-size: 12px;" rows="3"><%=merchantInfo.auditRefuseReason%></textarea>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
             <div class="weui-cells weui-cells_form">
                 <div class="weui-cell">
                     <div class="weui-cell__bd">
-                        <textarea id="description" class="weui-textarea" style="color:#76EE00;font-size: 12px;" rows="3">商户信息成功认证！</textarea>
+                        <textarea id="description" readonly class="weui-textarea" style="color:#76EE00;font-size: 12px;" rows="3">商户信息成功认证！</textarea>
                     </div>
                 </div>
             </div>
@@ -273,17 +273,72 @@
 
                     },
                     success:function(data){
-                        location.href="/wechat/merchant/home/main"
+                        $.alert("商户认证提交成功！审核进度可在此页面查看！",'提交成功',function () {
+                            location.href="/wechat/merchant/home/main"
+                        });
+
                     },
                 })
             }
         })
 
-        imgOption();
+        var auditState = '<%=merchantInfo.auditState%>';
+        if(auditState != '1'){
+            imgOption();
+        }
+
+
     });
-    
-    function check() {
+
+    function check(){
+        var merchantName = $("#merchantName").val();
+        var merchantCreditCode = $("#merchantCreditCode").val();
+        var merchantBusinessLicense = $("#merchantBusinessLicense").val();
+        var contact = $("#contact").val();
+
+        var phone = $("#phone").val();
+        var email = $("#email").val();
+        var address = $("#address").val();
+
+        if(emptyCheck(merchantName, "商户名称不能为空！")) return false;
+        if(emptyCheck(merchantCreditCode, "商户注册号不能为空！")) return false;
+        if(emptyCheck(merchantBusinessLicense, "营业执照不能为空！")) return false;
+        if(emptyCheck(contact, "联系人不能为空！")) return false;
+        if(emptyCheck(phone, "电话不能为空！")) return false;
+        if(emptyCheck(address, "商户地址不能为空！")) return false;
+
+        if(maxLengthCheck(merchantName,50,"商户名称过长！")) return false;
+        if(maxLengthCheck(merchantCreditCode,50,"商户注册号过长！")) return false;
+        if(maxLengthCheck(contact,50,"联系人名称过长！")) return false;
+        if(maxLengthCheck(email,50,"电子邮箱过长！")) return false;
+        if(maxLengthCheck(address,100,"商户地址过长！")) return false;
+
+
+        if(phone.length != 11){
+            $.toptip("联系电话请输入11位手机号码！", 'error');
+            return false;
+        }
+
         return true;
+    }
+
+    function emptyCheck(column, alert){
+
+        if(isEmpty(column)){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function maxLengthCheck(column, maxLength, alert){
+        if(column.length > maxLength){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        return false;
     }
 
     //图片操作

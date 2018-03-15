@@ -228,7 +228,7 @@
             success:function(data){
                 $("#merchantInfoUpd").attr("href",'/wechat/merchant/certification/edit?adminId='+wechatUserInfo.merchantAdminId)
                 if(null == data.result || JSON.stringify(data.result) == '{}'){
-                    $.alert("当前商户信息未认证，请前往认证页面进行认证！");
+                    $.alert("当前商户信息未认证，请前往认证页面进行认证！",'认证提示');
                 }
                 else{
                     //认证成功才能作的操作

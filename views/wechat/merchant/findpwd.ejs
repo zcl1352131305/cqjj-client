@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .weui-uploader__files img {
+            width: 100%;
+            height: 100%
+        }
+        .weui-uploader__files li{
+            border: 1px solid #ddd;
+        }
+        .weui-cells__title{
+            font-size: 14px;
+        }
+        .weui-cell{
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1>找回密码</h1>
+</header>
+
+<div class="wechat-content">
+
+    <div class="weui-cells__title">手机号验证</div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_vcode">
+            <div class="weui-cell__hd">
+                <label class="weui-label">商户账号</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input id="phone" class="weui-input" type="tel" placeholder="请输入手机号">
+            </div>
+            <div class="weui-cell__ft">
+                <button id="sendSMS" class="weui-vcode-btn">获取验证码</button>
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+            <div class="weui-cell__bd">
+                <input id="validateCode" class="weui-input" type="text" placeholder="输入验证码" />
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-cells__title">密码修改</div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">输入密码</label></div>
+            <div class="weui-cell__bd">
+                <input id="password" class="weui-input" type="password" placeholder="请输入密码" />
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">再次输入</label></div>
+            <div class="weui-cell__bd">
+                <input id="confirmPassword" class="weui-input" type="password" placeholder="请再次输入" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">修改密码</a>
+    </div>
+</div>
+
+
+
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="https://unpkg.com/qiniu-js@2.1.2/dist/qiniu.min.js"></script>
+<script type="text/javascript" src="//unpkg.com/crypto-js/crypto-js.js"></script>
+<script type="text/javascript" src="/static/javascripts/md5.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#showTooltips").on("click",function(){
+            if(check()){
+                $.ajax({
+                    url:"/wechat/merchant/home/findpwd",
+                    type:"post",
+                    data:{
+                        username:$("#phone").val(),
+                        password:hex_md5($("#password").val()),
+                        validateCode:$("#validateCode").val(),
+                        wechatUserId:'<%=wechatUserId%>'
+                    },
+                    success:function(data){
+                        if(data.code == 0 || data.code == '0'){
+                            location.href="/wechat/merchant/home/init?wechatUserId=<%=wechatUserId%>"
+                        }
+                        else{
+                            $.toptip(data.message, 'error');
+                        }
+                    },
+                    error:function(e){
+                        alert("操作失败!"+JSON.stringify(e));
+                    }
+                });
+            }
+        })
+    });
+
+
+    function check(){
+
+        var phone = $("#phone").val();
+        var validateCode = $("#validateCode").val();
+        var password = $("#password").val();
+        var confirmPassword = $("#confirmPassword").val();
+        if(null == phone || phone == '' || phone.length != 11){
+            $.toptip("请输入正确的手机号！", 'error');
+            return false;
+        }
+        if(null == validateCode || validateCode == ''){
+            $.toptip("验证码不能为空！", 'error');
+            return false;
+        }
+        if(null == password || password == '' || password.length != 6){
+            $.toptip("请输入6位密码！", 'error');
+            return false;
+        }
+        if(password != confirmPassword){
+            $.toptip("两次密码输入不一致！", 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+
+    $("#sendSMS").on("click",function(){
+        var phone = $("#phone").val();
+        if(null == phone || phone == '' || phone.length != 11){
+            $.toptip("请输入正确的手机号！", 'error');
+            return false;
+        }
+
+        var index = 60;
+        $("#sendSMS").attr("disabled","disabled");
+        $("#sendSMS").html(index+"秒后重发");
+        var i = setInterval(function () {
+            index --;
+            if(index > 0){
+                $("#sendSMS").attr("disabled","disabled");
+                $("#sendSMS").html(index+"秒后重发");
+            }
+            else{
+                $("#sendSMS").removeAttr("disabled");
+                $("#sendSMS").html("重新发送");
+                clearInterval(i)
+            }
+        },1000)
+
+        merchantAjax({
+            url:"/wechat/index/smsCode",
+            data:{
+                phone:phone
+            },
+            type:"get",
+            success:function(data){
+                alert(data.result)
+            },
+        })
+
+
+
+    })
+
+    function sendCodeChange(){
+
+    }
+
+
+</script>
+</html>

@@ -29,5 +29,17 @@ router.get('/init', function (req, res, next) {
     });
 });
 
+router.get('/smsCode', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/sms/sendSMS/"+ req.query.phone,
+            method: 'GET'
+        });
+    }).then(function (data) {
+        logger.error("----"+JSON.stringify(data));
+        res.json(data);
+    });
+});
+
 
 module.exports = router;

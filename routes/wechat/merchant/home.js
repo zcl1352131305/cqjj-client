@@ -1,5 +1,5 @@
 /**
- * 微信推送
+ * 商户登陆注册初始化以及绑定
  * Created by Administrator on 2017/9/20 0020.
  */
 var express = require('express');
@@ -110,6 +110,49 @@ router.post('/binding', function (req, res, next) {
     });
 });
 
+
+//跳转到注册页面
+router.get('/toRegister', function (req, res, next) {
+    res.render(ejsPrefix+"regist",{
+        wechatUserId: req.query.wechatUserId
+    })
+});
+
+//注册商户账号
+router.post('/regist', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/user/regist",
+            body: req.body,
+            method: 'POST',
+            json:true
+        });
+    }).then(function (data) {
+        res.json(data)
+    });
+});
+
+
+//跳转到修改密码界面
+router.get('/toFindpwd', function (req, res, next) {
+    res.render(ejsPrefix+"findpwd",{
+        wechatUserId: req.query.wechatUserId
+    })
+});
+
+//找回密码
+router.post('/findpwd', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/user/findpwd",
+            body: req.body,
+            method: 'PUT',
+            json:true
+        });
+    }).then(function (data) {
+        res.json(data)
+    });
+});
 
 
 
