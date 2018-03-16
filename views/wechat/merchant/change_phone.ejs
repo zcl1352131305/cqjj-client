@@ -31,16 +31,15 @@
 <body>
 <header class="wechat-header">
     <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
-    <h1>找回密码</h1>
+    <h1>更换手机号</h1>
 </header>
 
 <div class="wechat-content">
 
-    <div class="weui-cells__title">手机号验证</div>
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell weui-cell_vcode">
             <div class="weui-cell__hd">
-                <label class="weui-label">商户账号</label>
+                <label class="weui-label">新手机号</label>
             </div>
             <div class="weui-cell__bd">
                 <input id="phone" class="weui-input" type="tel" placeholder="请输入手机号">
@@ -56,28 +55,12 @@
                 <input id="validateCode" class="weui-input" type="text" placeholder="输入验证码" />
             </div>
         </div>
-    </div>
 
-    <div class="weui-cells__title">密码修改</div>
-    <div class="weui-cells weui-cells_form">
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">输入密码</label></div>
-            <div class="weui-cell__bd">
-                <input id="password" class="weui-input" type="password" placeholder="请输入密码" />
-            </div>
-        </div>
-
-        <div class="weui-cell">
-            <div class="weui-cell__hd"><label class="weui-label">再次输入</label></div>
-            <div class="weui-cell__bd">
-                <input id="confirmPassword" class="weui-input" type="password" placeholder="请再次输入" />
-            </div>
-        </div>
     </div>
 
 
     <div class="weui-btn-area">
-        <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">修改密码</a>
+        <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">立即注册</a>
     </div>
 </div>
 
@@ -94,24 +77,19 @@
     $(document).ready(function () {
         $("#showTooltips").on("click",function(){
             if(check()){
-                $.ajax({
-                    url:"/wechat/merchant/home/findpwd",
+                merchantAjax({
+                    url:"/wechat/merchant/home/updPhone",
                     type:"post",
                     data:{
+                        id:'<%=id%>',
                         username:$("#phone").val(),
-                        password:hex_md5($("#password").val()),
                         validateCode:$("#validateCode").val(),
                         wechatUserId:'<%=wechatUserId%>'
                     },
                     success:function(data){
-                        if(data.code == 0 || data.code == '0'){
-                            $.alert("密码修改成功！", "找回密码", function() {
-                                location.href="/wechat/merchant/home/init?wechatUserId=<%=wechatUserId%>"
-                            });
-                        }
-                        else{
-                            $.toptip(data.message, 'error');
-                        }
+                        $.alert("更换成功！", "手机号更换", function() {
+                            WeixinJSBridge.call('closeWindow');
+                        });
                     },
                     error:function(e){
                         alert("操作失败!"+JSON.stringify(e));
@@ -126,22 +104,12 @@
 
         var phone = $("#phone").val();
         var validateCode = $("#validateCode").val();
-        var password = $("#password").val();
-        var confirmPassword = $("#confirmPassword").val();
         if(null == phone || phone == '' || phone.length != 11){
             $.toptip("请输入正确的手机号！", 'error');
             return false;
         }
         if(null == validateCode || validateCode == ''){
             $.toptip("验证码不能为空！", 'error');
-            return false;
-        }
-        if(null == password || password == '' || password.length != 6){
-            $.toptip("请输入6位密码！", 'error');
-            return false;
-        }
-        if(password != confirmPassword){
-            $.toptip("两次密码输入不一致！", 'error');
             return false;
         }
 
@@ -183,13 +151,7 @@
             },
         })
 
-
-
     })
-
-    function sendCodeChange(){
-
-    }
 
 
 </script>

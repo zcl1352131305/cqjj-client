@@ -51,6 +51,9 @@
                         location.href = '/wechat/merchant/home/main';
                     },2000)
                 }
+                else if(data.code == 1 || data.code == '1'){
+                    $.toptip(data.msg, 'error');
+                }
                 else{
                     param.success(data);
                 }

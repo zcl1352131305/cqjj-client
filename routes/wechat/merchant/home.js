@@ -110,6 +110,19 @@ router.post('/binding', function (req, res, next) {
     });
 });
 
+//微信绑定后台账号
+router.get('/unBinding', function (req, res, next) {
+    logger.error("==="+JSON.stringify(req.body))
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/merchant/unBinding/" + req.query.id,
+            method: 'delete',
+        });
+    }).then(function (data) {
+        res.json(data)
+    });
+});
+
 
 //跳转到注册页面
 router.get('/toRegister', function (req, res, next) {
@@ -153,6 +166,40 @@ router.post('/findpwd', function (req, res, next) {
         res.json(data)
     });
 });
+
+
+//跳转到修改手机号界面
+router.get('/toChangePhone', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/user/loginUserInfo",
+            method: 'get',
+        });
+    }).then(function (data) {
+        logger.error('+++++'+JSON.stringify(data))
+        res.render(ejsPrefix+"change_phone",{
+            id: data.result.id,
+            wechatUserId: req.query.wechatUserId
+        })
+    });
+});
+
+
+//修改手机号
+router.post('/updPhone', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/user/updUsername",
+            body: req.body,
+            method: 'PUT',
+            json:true
+        });
+    }).then(function (data) {
+        res.json(data)
+    });
+});
+
+
 
 
 

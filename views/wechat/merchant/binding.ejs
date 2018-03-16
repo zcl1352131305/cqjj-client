@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="weui-cells__title">
-            您即将绑定商户账号至您的微信号，绑定后您可以快速登陆商户后台，若没有商户号，请
+            您即将绑定商户账号至您的微信号，绑定后您可以快速登陆商户后台，一个商户账号可以绑定多个微信，若没有商户号，请
             <a href="/wechat/merchant/home/toRegister?wechatUserId=<%=id%>" style="color: #1296db;">注册商户号</a>
             <!--若忘记密码，请<a href="/wechat/merchant/home/toFindpwd?wechatUserId=<%=id%>" style="color: #1296db;">找回密码</a>-->
         </div>
@@ -75,7 +75,10 @@
                     },
                     success:function(data){
                         if(data.code == 0 || data.code == '0'){
-                            location.href="/wechat/merchant/home/init?wechatUserId="+$("#id").val()
+                            $.alert("绑定成功！", "商户绑定", function() {
+                                location.href="/wechat/merchant/home/init?wechatUserId="+$("#id").val()
+                            });
+
                         }
                         else{
                             $.toptip(data.msg, 'error');
