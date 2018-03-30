@@ -90,16 +90,55 @@ router.post('/saveOrUpdate', function (req, res, next) {
 
 });
 
-
-
-
+//发布成功
 router.get('/toPublishSuccess', function (req, res, next) {
+    res.render(ejsPrefix+"sale_publish_success",{
+        id:req.query.id
+    });
+});
 
-        res.render(ejsPrefix+"sale_publish_success",{
-            id:req.query.id
+
+//我的发布
+router.get('/toMyPublish', function (req, res, next) {
+    res.render(ejsPrefix+"my_publish");
+});
+
+router.get('/myPublishPage', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureSale/page",
+            qs:req.query,
+            method: 'get',
         });
+    }).then(function (data) {
+        logger.error('+++++'+JSON.stringify(data))
+        res.json(data);
+    });
+});
 
+router.post('/updateSale', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureSale/update",
+            body: req.body,
+            method: 'PUT',
+            json:true
+        });
+    }).then(function (data) {
+        res.json(data);
+    });
+});
 
+router.get('/deleteSale', function (req, res, next) {
+
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureSale/remove/" + req.query.id,
+            method: 'DELETE'
+        });
+    }).then(function (data) {
+        res.json(data);
+    });
 
 });
 

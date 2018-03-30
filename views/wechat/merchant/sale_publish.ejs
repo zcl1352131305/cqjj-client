@@ -159,13 +159,13 @@
 
     var accessToken;
     $(document).ready(function () {
-
+        initFnType();
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })
         var userInfo = getGlobalAttribute("wechatUserInfo");
         $("#userId").val(userInfo.merchantAdminId)
-        initFnType();
+
     });
 
 
@@ -275,7 +275,8 @@
                         isNew: $("#isNew").is(":checked")?'1':'2',
                         keyword1:$("#keyword1").val(),
                         keyword2:$("#keyword2").val(),
-                        keyword3:$("#keyword3").val()
+                        keyword3:$("#keyword3").val(),
+                        isShow: '1'
                     },
                     success:function(data){
                         if(data.code == '0' || data.code == 0){
