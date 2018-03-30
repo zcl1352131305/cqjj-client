@@ -1,0 +1,26 @@
+/* 搜索相关 */
+
+.weui-search-bar {
+	width: 70%;
+	margin: auto;
+	height: 50px;
+	background: #fff;
+}
+
+.weui-search-bar__cancel-btn {
+	line-height: 34px;
+}
+.weui-search-bar__box .weui-icon-search {
+	line-height: 34px;
+}
+.weui-search-bar__box .weui-search-bar__input {
+	height: 34px;
+	padding: 0;
+	line-height: 34px;
+}
+.weui-search-bar__label {
+	top: 3px
+}
+.weui-search-bar:after, .weui-search-bar:before{
+	content: none;
+}

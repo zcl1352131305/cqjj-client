@@ -110,6 +110,14 @@
             </div>
 
             <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">经营范围</label></div>
+                <div class="weui-cell__bd">
+                    <input type="hidden" id="businessScope" value="<%=merchantInfo.typeIds%>" >
+                    <input class="weui-input" id="businessScopeNames" value="<%=merchantInfo.typeNames%>" readonly  />
+                </div>
+            </div>
+
+            <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">邮箱</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" id="email" value="<%=merchantInfo.email%>" type="text" placeholder="请输入邮箱" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%>  />
@@ -150,7 +158,7 @@
 
         <% if(merchantInfo.auditState != 1 && merchantInfo.auditState != '1'){%>
         <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">提交认证</a>
+            <a class="weui-btn btncolor" href="javascript:" id="showTooltips">提交认证</a>
         </div>
         <% }%>
 
@@ -179,7 +187,7 @@
 
     var accessToken;
     $(document).ready(function () {
-
+        initFnType();
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })
@@ -268,6 +276,7 @@
                         contact:$("#contact").val(),
                         phone:$("#phone").val(),
                         email:$("#email").val(),
+                        businessScopeIds: $("#businessScope").val(),
                         address:$("#address").val(),
                         auditState:"1"
 
@@ -295,6 +304,7 @@
         var merchantCreditCode = $("#merchantCreditCode").val();
         var merchantBusinessLicense = $("#merchantBusinessLicense").val();
         var contact = $("#contact").val();
+        var businessScopeNames = $("#businessScopeNames").val();
 
         var phone = $("#phone").val();
         var email = $("#email").val();
@@ -306,6 +316,7 @@
         if(emptyCheck(contact, "联系人不能为空！")) return false;
         if(emptyCheck(phone, "电话不能为空！")) return false;
         if(emptyCheck(address, "商户地址不能为空！")) return false;
+        if(emptyCheck(businessScopeNames, "经营范围不能为空！")) return false;
 
         if(maxLengthCheck(merchantName,50,"商户名称过长！")) return false;
         if(maxLengthCheck(merchantCreditCode,50,"商户注册号过长！")) return false;
@@ -360,6 +371,38 @@
         });
     }
 
+
+    function initFnType(){
+
+        $.ajax({
+            url:"/wechat/user/recycle/fnType",
+            type:"get",
+            success:function(data){
+                var fnType = [];
+                data.forEach(function(type){
+                    fnType.push({
+                        title:type.name,
+                        value:type.id
+                    });
+                });
+                $("#businessScopeNames").select({
+                    title: "请选择家具分类",
+                    items: fnType,
+                    multi: true,
+                    max: 5,
+                    min: 1,
+                    onChange: function(event) {
+                        $("#businessScope").val(event.values);
+                    }
+                });
+            },
+            error:function(e){
+                alert("操作失败!"+JSON.stringify(e));
+            }
+        });
+
+
+    }
 
 
 

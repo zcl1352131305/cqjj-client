@@ -1,0 +1,78 @@
+.weui-media-box__thumb{
+	height: 100%;
+}
+.weui-panel__bd .weui-media-box__title{
+	color: #555;
+	font-size: 14px !important;
+}
+
+.weui-media-box_appmsg .weui-media-box__hd{
+	margin-right: .6em !important;
+	width: 133px !important;
+	height: 100px !important;
+}
+.weui-media-box__bd{
+	height: 100px !important;
+}
+/*.weui-media-box__info{
+	margin-top: 10px;
+	padding-bottom: 0px;
+	font-size: 10px;
+}
+.weui-media-box_text .weui-media-box__title{
+	white-space:normal;
+}
+*/
+
+
+.weui-media-box__title {
+	height: 34px;
+	white-space: normal;
+	line-height: 17px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+.weui-media-box {
+	padding: 15px;
+	position: relative;
+}
+
+.wechat-content-price {
+	font-size: 18px;
+	color: #FF4040;
+	font-weight: bold;
+	height: 46px;
+	width: auto;
+	float: left;
+}
+
+.wechat-content-option {
+	width: 100%;
+	height: 46px;
+	line-height: 46px;
+}
+
+.wechat-content-btnGroup {
+	height: 46px;
+	float: right;
+}
+
+.wechat-content-option button {
+	width: auto;
+	height: 20px;
+	padding: 0 5px 0 5px;
+	border-radius: 5px;
+	background: #fff;
+}
+
+.wechat-content-address {
+	height: 20px;
+	font-size: 10px;
+	color: #bbb;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

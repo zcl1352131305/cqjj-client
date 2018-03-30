@@ -32,6 +32,7 @@
             url:param.url,
             type:param.type,
             data:param.data,
+            dataType:"json",
             success:function(data){
                 if(data.code == 401 || data.code == '401'){
                     $.toptip("登陆信息失效！", 'error');

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-mall-list.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-search.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .wechat-content{
+            width: 100%;
+            height: auto;
+            margin-top: 50px;
+            height:calc(100vh);
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <div class="weui-search-bar" id="searchBar">
+        <form class="weui-search-bar__form">
+            <div class="weui-search-bar__box">
+                <i class="weui-icon-search"></i>
+                <input type="search" class="weui-search-bar__input" id="searchTitle" placeholder="搜索" required="">
+                <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+            </div>
+            <label class="weui-search-bar__label" id="searchText">
+                <i class="weui-icon-search"></i>
+                <span>搜索</span>
+            </label>
+        </form>
+        <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+    </div>
+</header>
+
+<div class="wechat-content" style="margin-top: 0px;">
+    <div class="weui-pull-to-refresh__layer">
+        <div class='weui-pull-to-refresh__arrow'></div>
+        <div class='weui-pull-to-refresh__preloader'></div>
+        <div class="down">下拉刷新</div>
+        <div class="up">释放刷新</div>
+        <div class="refresh">正在刷新</div>
+    </div>
+
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd" id="recycleList">
+            <!-- 图文列表1 -->
+            <!--<div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="http://pic.58pic.com/58pic/13/66/22/58x58PICXTV_1024.jpg">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">渝中区解放西路家具搬迁家具搬迁，便宜渝中区解放西路家具搬迁家具搬迁，便渝中区解放西路家具搬迁家具搬迁，便出，便宜出售</h4>
+                    <div class="wechat-content-option" style="">
+                        <div class="wechat-content-price">¥500.00</div>
+                        <div class="wechat-content-btnGroup">
+                            <button class="bd-txt-color"><i class="fa fa-phone"></i> 邹朝亮</button>
+                        </div>
+                    </div>
+                    <p class="wechat-content-address" style=""><i class="fa fa-map-marker"></i> 重庆市渝中区解放西路66号16栋重庆市渝中区解放西路66号16栋</p>
+                </div>
+            </div>-->
+
+        </div>
+    </div>
+
+    <div id="loadMorePanel" class="weui-loadmore">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
+
+    <div id="noDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+
+
+<script type="text/html" id="recycleListTemplate">
+    {{each list as recycle}}
+    <div class="weui-media-box weui-media-box_appmsg" onclick="location.href='/wechat/merchant/recycle/detail?id={{recycle.id}}'">
+        <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{{recycle.headImg}}">
+        </div>
+        <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">{{recycle.title}}</h4>
+            <div class="wechat-content-option" style="">
+                <div class="wechat-content-price">¥{{recycle.price}}</div>
+                <div class="wechat-content-btnGroup">
+                    <button class="bd-txt-color"><i class="fa fa-phone"></i> {{recycle.contact}}</button>
+                </div>
+            </div>
+            <p class="wechat-content-address" style=""><i class="fa fa-map-marker"></i> {{recycle.address}}</p>
+        </div>
+    </div>
+    {{/each}}
+</script>
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="/static/javascripts/template.js"></script>
+<script>
+
+
+    var page=1;
+    $(document).ready(function () {
+        init();
+    });
+
+    function init(){
+        page=1;
+        loadData(function(html,pages){
+            $("#recycleList").html(html);
+            if(pages > 1){
+                infinite();
+            }
+            else{
+                showNoDataPanel();
+            }
+        });
+    }
+
+    $("#searchTitle").on('keypress',function(e) {
+            var keycode = e.keyCode;
+            var searchName = $(this).val();
+            if(keycode=='13') {
+                e.preventDefault();
+                init();
+            }
+        });
+
+
+    function loadData(handle){
+        merchantAjax({
+            url:"/wechat/merchant/recycle/frontPage",
+            type:"get",
+            data:{
+                page:page,
+                title:$("#searchTitle").val()
+            },
+            success:function(data){
+                var html = template("recycleListTemplate",data.result)
+                handle(html,data.result.pages);
+                if(page < data.result.pages){
+                    page ++ ;
+                }
+
+            },
+        })
+    }
+
+
+    $(".wechat-content").pullToRefresh(function() {
+        page = 1;
+        loadData(function(html,pages){
+            $("#recycleList").html(html);
+            $(".wechat-content").pullToRefreshDone();
+            if(pages > 1){
+                infinite();
+                showLoadMorePanel();
+            }
+            else{
+                showNoDataPanel();
+            }
+
+        });
+    });
+
+    var isLoading = false;
+    function infinite(){
+        $(".wechat-content").infinite().on("infinite", function() {
+            if(isLoading) return;
+            isLoading = true;
+            loadData(function(html,pages){
+
+                $("#recycleList").append(html);
+                if(page >= pages){
+                    $(".wechat-content").destroyInfinite();
+                    showNoDataPanel();
+                }
+                isLoading = false;
+            });
+
+        });;
+    }
+
+    function showLoadMorePanel(){
+        $("#loadMorePanel").css("display", "block");
+        $("#noDataPanel").css("display", "none");
+    }
+
+    function showNoDataPanel(){
+        $("#loadMorePanel").css("display", "none");
+        $("#noDataPanel").css("display", "block");
+    }
+
+
+</script>
+</html>

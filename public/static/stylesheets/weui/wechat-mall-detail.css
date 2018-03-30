@@ -1,0 +1,94 @@
+.swiper-slide{
+	width: 100%;
+	height: 0;
+	padding-top: 75%;
+}
+
+.swiper-slide img{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+
+.wechat-goods-info{
+	width: 100%;
+}
+.wechat-goods-info .title{
+	margin: 5px 10px 5px 10px;
+	font-size: 16px;
+	color: #333;
+}
+.wechat-goods-info .price{
+	margin: 5px 10px 5px 10px;
+	font-size: 20px;
+	color: #FF4040;
+	font-weight: bold;
+}
+.wechat-devide-title{
+	height: 30px;
+	line-height: 30px;
+	width: 100%;
+	color: #bbb;
+	text-align: center;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	background: #f4f4f4;
+}
+.wechat-contact-info{
+	width: 100%;
+}
+.wechat-goods-info .attr{
+	font-size: 13px;
+	color: #999;
+	margin: 5px 10px 5px 10px;
+	text-align: right;
+}
+.wechat-goods-info .attr .type{
+	right: 10px;
+	float: left;
+}
+.wechat-goods-info .attr .date{
+	
+}
+.wechat-contact-info .devide{
+	width: 90%;
+	height: 1px;
+	margin-left: 5%;
+	background: #f7f7f7;
+}
+.wechat-contact-info p{
+	margin: 6px 10px 6px 10px;
+}
+.wechat-contact-info p .title{
+	font-size: 14px;
+	color: #999;
+}
+.wechat-contact-info p .content{
+	margin-left: 15px;
+	font-size: 14px;
+	color: #222;
+}
+.wechat-detail-info{
+	width: 100%;
+	font-size: 14px;
+	color: #333;
+	text-indent: 20px;
+}
+.wechat-detail-info p{
+	margin: 6px 10px 6px 10px;
+}
+
+.wechat-foot{
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 18px;
+	color: #FFF;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+}

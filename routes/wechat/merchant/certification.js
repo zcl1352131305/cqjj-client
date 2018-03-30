@@ -34,6 +34,21 @@ router.get('/edit', function (req, res, next) {
             method: 'GET'
         });
     }).then(function (data) {
+        if(null != data.result && data.res != '' && null != data.result.businessScopes && data.result.businessScopes.length > 0){
+            var typeIds = '',typeNames = '';
+            data.result.businessScopes.forEach(function (value,i) {
+                if(i == 0){
+                    typeIds += value.typeId;
+                    typeNames += value.typeName;
+                }
+                else{
+                    typeIds += "," + value.typeId;
+                    typeNames += "," + value.typeName;
+                }
+            });
+            data.result.typeIds = typeIds;
+            data.result.typeNames = typeNames;
+        }
         var returnObj = {
             wxconfigUrl: constant.SYSTEM_PATH + req.originalUrl,
             basePath:constant.SYSTEM_PATH,
@@ -48,9 +63,28 @@ router.get('/edit', function (req, res, next) {
 });
 
 router.post('/saveOrUpdate', function (req, res, next) {
+
+    if(null == req.body.id || req.body.id == ''){
+        req.body.id = common.createUUID(32);
+    }
+
+    if(null != req.body.businessScopeIds && req.body.businessScopeIds != ''){
+        var businessScopeIds = req.body.businessScopeIds.split(",");
+        var businessScopes = new Array();
+        for(var i=0; i<businessScopeIds.length; i++){
+            businessScopes.push({
+                id:common.createUUID(32),
+                merchantId:req.body.id,
+                typeId:businessScopeIds[i]
+            })
+        }
+        req.body.businessScopes = businessScopes;
+    }
+
+    logger.debug("---------"+JSON.stringify(req.body))
     return Promise.try(function () {
         return cRequest.sendRequest(req, res, {
-            url: constant.BASE_PATH + "/cqjjTrade/merchant/saveOrUpdate/",
+            url: constant.BASE_PATH + "/cqjjTrade/merchant/saveOrUpdate",
             body: req.body,
             method: 'POST',
             json:true

@@ -28,45 +28,56 @@
 <body>
 
 <header class="wechat-header">
-    <% if(isFromMenu != 'true'){%>
     <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
-    <%} %>
-
-    <h1>家具回收发布</h1>
+    <h1>家具发布</h1>
 </header>
 
 <div class="wechat-content">
     <form id="form" action="/wechat/user/fnRecycle/saveOrUpdate" method="post">
-        <input type="hidden" name="id" value="<%=recycle.id%>">
-        <input type="hidden" id="headImg" name="headImg" value="<%=recycle.headImg%>">
-        <input type="hidden" id="userId" name="userId" value="<%=recycle.userId%>">
+        <input type="hidden" id="id" name="id" value="<%=sale.id%>">
+        <input type="hidden" id="headImg" name="headImg" value="<%=sale.headImg%>">
+        <input type="hidden" id="userId" name="userId" value="<%=sale.userId%>">
         <div class="weui-cells__title">家具信息</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">发布标题</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="title" name="title" type="text" value="<%=recycle.title%>" placeholder="请输入标题" />
+                    <input class="weui-input" id="title" name="title" type="text" value="<%=sale.title%>" placeholder="请输入标题" />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">家具名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="fnName" name="fnName" type="text" value="<%=sale.fnName%>" placeholder="请输入家具名称" />
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">家具分类</label></div>
                 <div class="weui-cell__bd">
-                    <input id="furnitureType" name="typeId" type="hidden" value="<%=recycle.typeId%>"  />
-                    <input id="furnitureTypeName" class="weui-input" data-values="<%=recycle.typeId%>" type="text" placeholder="请选择家具类型" />
+                    <input id="furnitureType" name="typeId" type="hidden" value="<%=sale.typeId%>"  />
+                    <input id="furnitureTypeName" class="weui-input" data-values="<%=sale.typeId%>" type="text" placeholder="请选择家具类型" />
                 </div>
             </div>
 
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">回收价格</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">销售价格</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="price" name="price" type="number" value="<%=recycle.price%>" placeholder="请输入价格" />
+                    <input class="weui-input" id="price" name="price" type="number" value="<%=sale.price%>" placeholder="请输入价格" />
+                </div>
+            </div>
+
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">是否新货</div>
+                <div class="weui-cell__ft">
+                    <input id="isNew" class="weui-switch" type="checkbox" <%=sale.isNew == '1'?'checked':''%>>
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea id="description" name="detailInfo" class="weui-textarea" placeholder="请输入简要介绍" rows="3"><%=recycle.detailInfo%></textarea>
+                    <textarea id="description" name="detailInfo" class="weui-textarea" placeholder="请输入简要介绍" rows="3"><%=sale.detailInfo%></textarea>
                 </div>
             </div>
         </div>
@@ -82,8 +93,8 @@
                                 <!--<li class="weui-uploader__file">
                                     <img src="http://img.taopic.com/uploads/allimg/120727/201995-120HG1030762.jpg" />
                                 </li>-->
-                                <% recycle.fnImgs.forEach(function(img){%>
-                                    <li class="weui-uploader__file <%=img.url == recycle.headImg?'title':''%>">
+                                <% sale.fnImgs.forEach(function(img){%>
+                                    <li class="weui-uploader__file <%=img.url == sale.headImg?'title':''%>">
                                         <img src="<%=img.url%>" />
                                         <input type="hidden" name="furnitureImg" value="<%=img.url%>">
                                     </li>
@@ -98,32 +109,24 @@
             </div>
         </div>
 
-        <div class="weui-cells__title" onclick="chooseImg()">联系人信息</div>
+        <div class="weui-cells__title">关键字（用户搜索时的关键字，最多三个）</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">关键字1</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="contact" name="contact" type="text" value="<%=recycle.contact%>" placeholder="请输入姓名" />
-                </div>
-            </div>
-
-            <!--<div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
-                <div class="weui-cell__bd">
-                    <input id="gender" class="weui-input" type="text" placeholder="请选择性别" />
-                </div>
-            </div>-->
-
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" id="phone" name="phone" type="number" value="<%=recycle.phone%>" placeholder="请输入联系电话" />
+                    <input class="weui-input" id="keyword1" name="keyword1" type="text" value="<%=sale.keyword1%>" placeholder="请输入关键字1" />
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">联系地址</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">关键字2</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="address" name="address" type="text" value="<%=recycle.address%>" placeholder="请输入联系地址" />
+                    <input class="weui-input" id="keyword2" name="keyword2" type="text" value="<%=sale.keyword2%>" placeholder="请输入关键字2" />
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">关键字3</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="keyword3" name="keyword3" type="text" value="<%=sale.keyword3%>" placeholder="请输入关键字3" />
                 </div>
             </div>
 
@@ -156,19 +159,12 @@
 
     var accessToken;
     $(document).ready(function () {
-        var userInfo = getGlobalAttribute("userInfo");
-        if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
-            userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
-            if(!isEmpty(userInfo) && userInfo != '{}'){
-                setGlobalAttribute("userInfo",JSON.parse(userInfo));
-            }
-        }
 
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })
-        var userInfo = getGlobalAttribute("userInfo");
-        $("#userId").val(userInfo.id)
+        var userInfo = getGlobalAttribute("wechatUserInfo");
+        $("#userId").val(userInfo.merchantAdminId)
         initFnType();
     });
 
@@ -248,11 +244,49 @@
             });
         }
 
-        var isClick = true;
+        var isClick = true;//防止重复点击
         $("#showTooltips").on("click",function(){
+
             if(check() && isClick){
                 isClick = false;
-                $("#form").submit()
+                var imgs = $("input[name='furnitureImg']");
+                var furnitureImg = '';
+                for(var i=0 ;i<imgs.length;i++){
+                    if(i == 0){
+                        furnitureImg += $(imgs[i]).val()
+                    }
+                    else{
+                        furnitureImg += "," + $(imgs[i]).val()
+                    }
+                }
+                merchantAjax({
+                    url:"/wechat/merchant/sale/saveOrUpdate",
+                    type:"post",
+                    data:{
+                        id:$("#id").val(),
+                        headImg:$("#headImg").val(),
+                        userId:$("#userId").val(),
+                        title: $("#title").val(),
+                        fnName: $("#fnName").val(),
+                        typeId: $("#furnitureType").val(),
+                        furnitureImg:furnitureImg,
+                        price: $("#price").val(),
+                        detailInfo:$("#description").val(),
+                        isNew: $("#isNew").is(":checked")?'1':'2',
+                        keyword1:$("#keyword1").val(),
+                        keyword2:$("#keyword2").val(),
+                        keyword3:$("#keyword3").val()
+                    },
+                    success:function(data){
+                        if(data.code == '0' || data.code == 0){
+                           location.href = "/wechat/merchant/sale/toPublishSuccess?id="+data.result;
+                        }
+                        else{
+                            isClick = true;
+                        }
+
+                    }
+                })
             }
         })
 
@@ -261,27 +295,28 @@
 
     function check(){
         var title = $("#title").val();
+        var fnName = $("#fnName").val();
         var type = $("#furnitureTypeName").val();
         var price = $("#price").val();
         var detailInfo = $("#description").val();
 
+        var keyword1 = $("#keyword1").val();
+        var keyword2 = $("#keyword2").val();
+        var keyword3 = $("#keyword3").val();
+
         var imgs = $("#uploaderFiles").children().length
-        var contact = $("#contact").val();
-        var phone = $("#phone").val();
-        var address = $("#address").val();
+
         if(emptyCheck(title, "标题不能为空！")) return false;
+        if(emptyCheck(fnName, "家具名称不能为空！")) return false;
         if(emptyCheck(type, "类型不能为空！")) return false;
         if(emptyCheck(detailInfo, "描述不能为空！")) return false;
-        if(emptyCheck(contact, "联系人不能为空！")) return false;
-        if(emptyCheck(phone, "电话不能为空！")) return false;
         if(maxLengthCheck(title,50,"标题过长！")) return false;
+        if(maxLengthCheck(fnName,50,"家具过长！")) return false;
         if(maxLengthCheck(detailInfo,300,"描述过长！请控制300字内！")) return false;
         if(maxLengthCheck(price,50,"价格不合理！")) return false;
-        if(maxLengthCheck(contact,50,"联系人名称过长！")) return false;
-        if(phone.length != 11){
-            $.toptip("请输入11位手机号码！", 'error');
-            return false;
-        }
+        if(maxLengthCheck(keyword1,10,"关键字过长，10字符内！")) return false;
+        if(maxLengthCheck(keyword2,10,"关键字过长，10字符内！")) return false;
+        if(maxLengthCheck(keyword3,10,"关键字过长，10字符内！")) return false;
         if(imgs <= 0){
             $.toptip("请上传至少一张图片！", 'error');
             return false;
@@ -290,8 +325,6 @@
             $.toptip("图片最多上传5张！", 'error');
             return false;
         }
-
-        if(maxLengthCheck(address,100,"联系地址过长！")) return false;
 
         return true;
     }
@@ -348,7 +381,7 @@
             url:"/wechat/user/recycle/fnType",
             type:"get",
             success:function(data){
-                var fnType = [], selectFnType = '<%=recycle.typeId%>';
+                var fnType = [], selectFnType = '<%=sale.typeId%>';
                 data.forEach(function(type){
                     fnType.push({
                         title:type.name,
@@ -378,18 +411,5 @@
 
 
 
-    /*$("#description").on("input",function(){
-        var desc = $(this).val();
-        var len = desc.length;
-        $("#wordNumber").html(len);
-        if(len > 200){
-            $(this).val(desc.substring(0,200))
-        }
-    });*/
-
-    /*$("#buyDate").calendar({
-        dateFormat: 'yyyy-mm-dd',
-        value: ['2018-03-05']
-    });*/
 </script>
 </html>
