@@ -40,7 +40,7 @@ router.get('/edit', function (req, res, next) {
                 id: '',
                 fnImgs:[]
             }
-            res.render(ejsPrefix+"fnRecyle_publish",returnObj);
+            res.render(ejsPrefix+"recycle_publish",returnObj);
         });
     }
     else{
@@ -59,7 +59,7 @@ router.get('/edit', function (req, res, next) {
                     data.result.fnImgs = []
                 }
                 returnObj.recycle = data.result
-                res.render(ejsPrefix+"fnRecyle_publish",returnObj);
+                res.render(ejsPrefix+"recycle_publish",returnObj);
             });
         }
         else{
@@ -67,7 +67,7 @@ router.get('/edit', function (req, res, next) {
                 id: '',
                 fnImgs:[]
             }
-            res.render(ejsPrefix+"fnRecyle_publish",returnObj);
+            res.render(ejsPrefix+"recycle_publish",returnObj);
         }
     }
 
@@ -110,7 +110,7 @@ router.post('/saveOrUpdate', function (req, res, next) {
             json:true
         });
     }).then(function (data) {
-        res.render(ejsPrefix+"publish_success",data);
+        res.render(ejsPrefix+"recycle_publish_success",data);
     });
 
 });

@@ -36,7 +36,7 @@
 </header>
 
 <div class="wechat-content">
-    <form id="form" action="/wechat/user/fnRecycle/saveOrUpdate" method="post">
+    <form id="form" action="/wechat/user/recycle/saveOrUpdate" method="post">
         <input type="hidden" name="id" value="<%=recycle.id%>">
         <input type="hidden" id="headImg" name="headImg" value="<%=recycle.headImg%>">
         <input type="hidden" id="userId" name="userId" value="<%=recycle.userId%>">
@@ -156,18 +156,18 @@
 
     var accessToken;
     $(document).ready(function () {
-        var userInfo = getGlobalAttribute("userInfo");
+        var userInfo = getGlobalAttribute("userInfo_cqjj");
         if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
             userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
             if(!isEmpty(userInfo) && userInfo != '{}'){
-                setGlobalAttribute("userInfo",JSON.parse(userInfo));
+                setGlobalAttribute("userInfo_cqjj",JSON.parse(userInfo));
             }
         }
 
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })
-        var userInfo = getGlobalAttribute("userInfo");
+        var userInfo = getGlobalAttribute("userInfo_cqjj");
         $("#userId").val(userInfo.id)
         initFnType();
     });
