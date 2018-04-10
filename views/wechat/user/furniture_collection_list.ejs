@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-mall-list.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .wechat-content{
+            width: 100%;
+            height: auto;
+            margin-top: 50px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        header .icon-filter{
+            position: absolute;
+            right: 15px;
+            top: 0;
+            color: #444;
+            line-height: 50px;
+        }
+        .wechat-content-address{
+            width: 70%;
+            float: left;
+        }
+        .wechat-content-type{
+            width: 30%;
+            font-size: 10px;
+            text-align: right;
+            float: left;
+        }
+        .choose-content{
+            width: 94%;
+            padding: 3%;
+            background: #fff;
+        }
+        .choose-content .head{
+            width: 100%;
+            height: 30px;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 1px solid #f4f4f4;
+        }
+        .choose-content .fntype{
+            width: 100%;
+            height: 100px;
+            margin-top: 8px;
+        }
+        .choose-content .fntype div{
+            width: 25%;
+            height: 46px;
+            line-height: 46px;
+            float: left;
+            text-align: center;
+        }
+        .choose-content .fntype div span{
+            padding: 8px 15px 8px 15px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1>我的收藏</h1>
+</header>
+
+<div class="wechat-content">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd" id="publishList">
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/html" id="publishListTemplate">
+    {{each result as furniture}}
+    <div class="weui-media-box weui-media-box_appmsg" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">
+        <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{{furniture.headImg}}">
+        </div>
+        <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">{{furniture.title}}</h4>
+            <div class="wechat-content-option" style="">
+                <div class="wechat-content-price">¥{{furniture.price}}</div>
+                <div class="wechat-content-btnGroup">
+                    <button class="bd-txt-color"><i class="fa fa-phone"></i> 联系</button>
+                    <button class="bd-txt-color"><i class="fa fa-archive"></i> 店铺</button>
+                </div>
+            </div>
+            <div class="wechat-content-address" style=""><i class="fa fa-map-marker"></i>{{furniture.merchantName}}</div>
+            <div class="wechat-content-type textcolor" style="">{{furniture.isNew == '1'?'全新家具':'二手家具'}}</div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="/static/javascripts/template.js"></script>
+<script>
+
+
+    $(document).ready(function () {
+        init();
+    });
+
+    function init(){
+        loadData(function(html){
+            $("#publishList").html(html);
+        });
+    }
+
+
+    function loadData(handle){
+        var userInfo = getGlobalAttribute("userInfo_cqjj")
+        merchantAjax({
+            url:"/wechat/user/collection/furniture/list",
+            type:"get",
+            data:{
+                userId:userInfo.id
+            },
+            success:function(data){
+                var html = template("publishListTemplate",data)
+                handle(html,data.result.pages);
+            },
+        })
+    }
+
+
+    function delSale(id){
+        $.confirm({
+            title: '确认删除？',
+            text: '删除之后无法恢复！请谨慎操作！',
+            onOK: function () {
+                merchantAjax({
+                    url:"/wechat/merchant/sale/deleteSale",
+                    type:"get",
+                    data:{
+                        id:id
+                    },
+                    success:function(data){
+                        $('#column_'+id).remove();
+                        $.toptip("删除成功！", 'success');
+                    },
+                })
+            },
+            onCancel: function () {
+            }
+        });
+    }
+
+</script>
+</html>

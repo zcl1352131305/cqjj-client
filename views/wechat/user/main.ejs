@@ -121,7 +121,7 @@
 
 <body>
 <header class="wechat-header">
-    <a class="icon-user"><img id="headImg" src="https://ps.ssl.qhimg.com/t01d7de9ec9fd9ce918.png"></a>
+    <a class="icon-user" href="javascript:void(0)"><img id="headImg" src=""></a>
     <div class="weui-search-bar" id="searchBar">
         <form class="weui-search-bar__form">
             <div class="weui-search-bar__box">
@@ -273,8 +273,21 @@
 
     function init(){
         var userInfo = getGlobalAttribute("userInfo_cqjj");
-        $("#headImg").attr("src",userInfo.headImgUrl)
+        $("#headImg").attr("src",userInfo.headImgUrl);
+        $("#headImg").on("click",function () {
+            location.href = '/wechat/user/home/personal'
+        })
     }
+
+
+    $("#searchInput").on('keypress',function(e) {
+        var keycode = e.keyCode;
+        var searchName = $(this).val();
+        if(keycode=='13') {
+            e.preventDefault();
+            location.href = "/wechat/user/furniture/init?searchTitle="+searchName;
+        }
+    });
 
 
 

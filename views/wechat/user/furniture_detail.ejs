@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-mall-detail.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style>
+        .wechat-foot-collect{
+            float: left;
+            width: 50%;
+            height:100%;
+        }
+    </style>
+</head>
+
+
+<body>
+    <header class="wechat-header">
+        <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+        <h1>回收详情</h1>
+    </header>
+
+    <div class="wechat-content">
+        <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+            <div class="swiper-wrapper">
+                <% furnitureInfo.fnImgs.forEach(function (img) { %>
+                <div class="swiper-slide">
+                    <img src="<%=img.url%>" alt="">
+                </div>
+                <% }) %>
+            </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <div class="wechat-goods-info">
+            <p class="title"><%=furnitureInfo.title%></p>
+            <p class="price">¥<%=furnitureInfo.price%></p>
+            <p class="attr"><span class="type">办公家具</span><span class="date"><%=furnitureInfo.dateUpdated%></span></p>
+        </div>
+
+        <div class="wechat-devide-title">&nbsp;&nbsp;<i class="fa fa-file-text-o"></i>&nbsp;家具描述&nbsp;&nbsp;</div>
+        <div class="wechat-detail-info" style="min-height: 50px;">
+            <p><%=furnitureInfo.detailInfo%></p>
+        </div>
+
+        <div class="wechat-devide-title">&nbsp;&nbsp;<i class="fa fa-user-circle"></i>&nbsp;店铺信息&nbsp;&nbsp;</div>
+        <div class="wechat-contact-info">
+            <p><span class="title">店铺名称</span><span class="content textcolor"><%=merchantInfo.merchantName%></span></p>
+            <div class="devide"></div>
+            <p><span class="title">联系电话</span><span class="content"><%=merchantInfo.phone%>(<%=merchantInfo.contact%>)</span></p>
+            <div class="devide"></div>
+            <p><span class="title">店铺地址</span><span class="content"><%=merchantInfo.address%></span></p>
+        </div>
+
+        <div class="bottom-height"></div>
+    </div>
+
+    <div class="wechat-foot">
+        <div id="collect" class="wechat-foot-collect" style="background: #ddd;" onclick="addCollection()">加入收藏</div>
+        <div class="wechat-foot-collect btncolor">立即联系</div>
+    </div>
+</body>
+<%- include('../public/public_js') %>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/swiper.min.js"></script>
+<script>
+
+
+    $(document).ready(function () {
+        $(".swiper-container").swiper({
+            autoplay:5000,
+            loop:true
+        })
+        checkIsCollection();
+    });
+
+
+    function checkIsCollection(){
+        var userInfo = getGlobalAttribute("userInfo_cqjj");
+        var id = '<%=furnitureInfo.id%>';
+        merchantAjax({
+            url:"/wechat/user/collection/furniture/list",
+            type:"get",
+            data:{
+                userId:userInfo.id
+            },
+            success:function(data){
+                var isCollection = false, collectionId;
+                data.result.forEach(function (obj) {
+                    if(obj.id == id){
+                        isCollection = true;
+                        collectionId = obj.collectionId
+                    }
+                })
+
+                if(isCollection){
+                    $("#collect").html("取消收藏")
+                    $("#collect").attr("onclick","rmvCollection('"+collectionId+"')")
+                }
+                else{
+                    $("#collect").html("加入收藏")
+                    $("#collect").attr("onclick","addCollection()")
+                }
+            },
+        })
+    }
+
+    function addCollection(){
+        var userInfo = getGlobalAttribute("userInfo_cqjj");
+        var furnitureId = '<%=furnitureInfo.id%>';
+        merchantAjax({
+            url:"/wechat/user/collection/furniture/add",
+            type:"post",
+            data:{
+                furnitureId:furnitureId,
+                userId:userInfo.id
+            },
+            success:function(data){
+                $.toptip("收藏成功！", 'success');
+                $("#collect").html("取消收藏")
+                $("#collect").attr("onclick","rmvCollection('"+data.result+"')")
+            },
+        })
+    }
+
+    function rmvCollection(id){
+        var userInfo = getGlobalAttribute("userInfo_cqjj");
+        var furnitureId = '<%=furnitureInfo.id%>';
+        merchantAjax({
+            url:"/wechat/user/collection/furniture/remove",
+            type:"get",
+            data:{
+                id:id
+            },
+            success:function(data){
+                $.toptip("取消成功！", 'success');
+                $("#collect").html("加入收藏")
+                $("#collect").attr("onclick","addCollection()")
+            },
+        })
+    }
+
+
+</script>
+</html>

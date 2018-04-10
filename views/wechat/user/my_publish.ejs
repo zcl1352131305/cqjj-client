@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-mall-list.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .wechat-content{
+            width: 100%;
+            height: auto;
+            margin-top: 50px;
+            height:calc(100vh);
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .weui-search-bar:after, .weui-search-bar:before{
+            content: none;
+        }
+        .weui-media-box{
+
+            background: #FFF;
+        }
+        .weui-panel{
+            background: #fafafa;
+        }
+        .wechat-content-state{
+            font-size: 16px;
+        }
+        .weui-media-box{
+            border-bottom: 1px solid #f4f4f4;
+        }
+        .wechat-bottom{
+            width: 100%;
+            height: 50px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        .wechat-bottom button{
+            float: right;
+            width: auto;
+            height: 34px;
+            border-radius: 5px;
+            background: #fff;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-top: 7px;
+            margin-right: 10px;
+            min-width: 70px;
+        }
+
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1>我的发布</h1>
+</header>
+
+<div class="wechat-content" style="margin-top: 0px;">
+    <div class="weui-pull-to-refresh__layer">
+        <div class='weui-pull-to-refresh__arrow'></div>
+        <div class='weui-pull-to-refresh__preloader'></div>
+        <div class="down">下拉刷新</div>
+        <div class="up">释放刷新</div>
+        <div class="refresh">正在刷新</div>
+    </div>
+
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd" id="publishList">
+
+
+        </div>
+    </div>
+
+    <div id="loadMorePanel" class="weui-loadmore">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </div>
+
+    <div id="noDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+
+
+<script type="text/html" id="publishListTemplate">
+    {{each list as furniture}}
+    <div class="column" id="column_{{furniture.id}}">
+        <div class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="{{furniture.headImg}}">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">{{furniture.title}}</h4>
+                <div class="wechat-content-option" style="">
+                    <div class="wechat-content-state" id="showFlag_{{furniture.id}}">
+                        {{if furniture.isShow == 1}}
+                        <span class="textcolor">显示中</span>
+                        {{else}}
+                        <span style="color: #ca4440;">未显示</span>
+                        {{/if}}
+                    </div>
+                </div>
+                <p class="wechat-content-address" style="float: right;">修改于{{furniture.dateUpdated}}</p>
+            </div>
+        </div>
+        <div class="wechat-bottom">
+            <button class="bdcolor textcolor" onclick="delPublish('{{furniture.id}}')">删除</button>
+            <button class="bdcolor textcolor" onclick="location.href='/wechat/user/recycle/edit?id={{furniture.id}}&isFromMenu=false'">修改</button>
+            {{if furniture.isShow == 1}}
+            <button class="bdcolor textcolor" onclick="updPublish('{{furniture.id}}','0',this)">隐藏</button>
+            {{else}}
+            <button class="bdcolor textcolor" onclick="updPublish('{{furniture.id}}','1',this)">显示</button>
+            {{/if}}
+
+        </div>
+    </div>
+    {{/each}}
+</script>
+</body>
+<%- include('../public/public_js') %>
+<script type="text/javascript" src="/static/javascripts/template.js"></script>
+<script>
+
+
+    var page=1;
+    $(document).ready(function () {
+        init();
+    });
+
+    function init(){
+        page=1;
+        loadData(function(html,pages){
+            $("#publishList").html(html);
+            if(pages > 1){
+                infinite();
+            }
+            else{
+                showNoDataPanel();
+            }
+        });
+    }
+
+
+    function loadData(handle){
+        var wechatUserInfo = getGlobalAttribute("userInfo_cqjj")
+        merchantAjax({
+            url:"/wechat/user/furniture/myPublishPage",
+            type:"get",
+            data:{
+                page:page,
+                userId:wechatUserInfo.id
+            },
+            success:function(data){
+                var html = template("publishListTemplate",data.result)
+                handle(html,data.result.pages);
+                if(page < data.result.pages){
+                    page ++ ;
+                }
+
+            },
+        })
+    }
+
+
+    $(".wechat-content").pullToRefresh(function() {
+        page = 1;
+        loadData(function(html,pages){
+            $("#publishList").html(html);
+            $(".wechat-content").pullToRefreshDone();
+            if(pages > 1){
+                infinite();
+                showLoadMorePanel();
+            }
+            else{
+                showNoDataPanel();
+            }
+
+        });
+    });
+
+    var isLoading = false;
+    function infinite(){
+        $(".wechat-content").infinite().on("infinite", function() {
+            if(isLoading) return;
+            isLoading = true;
+            loadData(function(html,pages){
+
+                $("#publishList").append(html);
+                if(page >= pages){
+                    $(".wechat-content").destroyInfinite();
+                    showNoDataPanel();
+                }
+                isLoading = false;
+            });
+
+        });;
+    }
+
+    function showLoadMorePanel(){
+        $("#loadMorePanel").css("display", "block");
+        $("#noDataPanel").css("display", "none");
+    }
+
+    function showNoDataPanel(){
+        $("#loadMorePanel").css("display", "none");
+        $("#noDataPanel").css("display", "block");
+    }
+
+
+
+    function updPublish(id,isShow,btn){
+        merchantAjax({
+            url:"/wechat/user/furniture/updateSale",
+            type:"post",
+            data:{
+                id:id,
+                isShow:isShow
+            },
+            success:function(data){
+                if(isShow == '1' || isShow == 1){
+                    $(btn).html("隐藏");
+                    $(btn).attr("onclick","updState('"+id+"','0',this)")
+                    $("#showFlag_"+id).html('<span class="textcolor">显示中</span>');
+                }
+                else{
+                    $(btn).html("显示");
+                    $(btn).attr("onclick","updState('"+id+"','1',this)")
+                    $("#showFlag_"+id).html('<span style="color: #ca4440;">未显示</span>');
+                }
+            },
+        })
+    }
+
+    function delPublish(id){
+        $.confirm({
+            title: '确认删除？',
+            text: '删除之后无法恢复！请谨慎操作！',
+            onOK: function () {
+                merchantAjax({
+                    url:"/wechat/user/furniture/deleteSale",
+                    type:"get",
+                    data:{
+                        id:id
+                    },
+                    success:function(data){
+                        $('#column_'+id).remove();
+                        $.toptip("删除成功！", 'success');
+                    },
+                })
+            },
+            onCancel: function () {
+            }
+        });
+    }
+
+</script>
+</html>

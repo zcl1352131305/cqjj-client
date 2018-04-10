@@ -25,7 +25,8 @@ router.get('/init', function (req, res, next) {
         res.render(ejsPrefix+"furniture_list",{
             fnTypes:data.result,
             isNew:req.query.isNew,
-            fnType:req.query.fnType
+            fnType:req.query.fnType,
+            searchTitle:req.query.searchTitle
         })
     });
 
@@ -44,16 +45,75 @@ router.get('/frontPage', function (req, res, next) {
     });
 });
 
-/*router.get('/detail', function (req, res, next) {
+router.get('/detail', function (req, res, next) {
+    var returnObj = {};
     return Promise.try(function () {
         return cRequest.sendRequest(req, res, {
-            url: constant.BASE_PATH + "/cqjjTrade/furnitureRecycle/get/"+req.query.id,
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureSale/get/"+req.query.id,
+            method: 'get',
+        });
+    }).then(function (data) {
+        returnObj.furnitureInfo = data.result;
+        if(null != returnObj.furnitureInfo.dateUpdated){
+            returnObj.furnitureInfo.dateUpdated = common.formatDateTime(returnObj.furnitureInfo.dateUpdated)
+        }
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/merchant/getByAdminId/"+data.result.userId,
+            method: 'get',
+        });
+    }).then(function (data) {
+        returnObj.merchantInfo = data.result;
+        returnObj.merchantInfo.businessScopes = null;
+        logger.error('+++++'+JSON.stringify(returnObj))
+        res.render(ejsPrefix+"furniture_detail",returnObj)
+    });
+});
+
+
+
+//我的发布
+router.get('/toMyPublish', function (req, res, next) {
+    res.render(ejsPrefix+"my_publish");
+});
+
+router.get('/myPublishPage', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureRecycle/page",
+            qs:req.query,
             method: 'get',
         });
     }).then(function (data) {
         logger.error('+++++'+JSON.stringify(data))
-        res.render(ejsPrefix+"recycle_detail",data);
+        res.json(data);
     });
-});*/
+});
+
+router.post('/updateSale', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureRecycle/update",
+            body: req.body,
+            method: 'PUT',
+            json:true
+        });
+    }).then(function (data) {
+        res.json(data);
+    });
+});
+
+router.get('/deleteSale', function (req, res, next) {
+
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/furnitureRecycle/remove/" + req.query.id,
+            method: 'DELETE'
+        });
+    }).then(function (data) {
+        res.json(data);
+    });
+
+});
+
 
 module.exports = router;

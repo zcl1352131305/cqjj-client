@@ -79,12 +79,12 @@
         <form class="weui-search-bar__form">
             <div class="weui-search-bar__box">
                 <i class="weui-icon-search"></i>
-                <input type="search" class="weui-search-bar__input" id="searchTitle" placeholder="搜索" required="">
+                <input type="search" class="weui-search-bar__input"value="<%=searchTitle%>" id="searchTitle" placeholder="搜索" required="">
                 <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
             </div>
             <label class="weui-search-bar__label" id="searchText">
                 <i class="weui-icon-search"></i>
-                <span>搜索</span>
+                <span><%=(searchTitle == null || searchTitle == '')?'搜索':searchTitle%></span>
             </label>
         </form>
         <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
@@ -159,7 +159,7 @@
 
 <script type="text/html" id="furnitureListTemplate">
     {{each list as furniture}}
-    <div class="weui-media-box weui-media-box_appmsg">
+    <div class="weui-media-box weui-media-box_appmsg" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">
         <div class="weui-media-box__hd">
             <img class="weui-media-box__thumb" src="{{furniture.headImg}}">
         </div>

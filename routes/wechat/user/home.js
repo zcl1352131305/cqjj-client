@@ -41,6 +41,10 @@ router.get('/main', function (req, res, next) {
 
 });
 
+router.get('/personal', function (req, res, next) {
+    res.render(ejsPrefix+"personal");
+});
+
 
 
 

@@ -35,6 +35,7 @@ var qiniu = require('./routes/qiniu');
 var userHome = require('./routes/wechat/user/home');
 var userRecycle = require('./routes/wechat/user/recycle');
 var userFurniture = require('./routes/wechat/user/furniture');
+var userCollection = require('./routes/wechat/user/collection');
 
 var merchantHome = require('./routes/wechat/merchant/home');
 var merchantCertification = require('./routes/wechat/merchant/certification');
@@ -60,6 +61,7 @@ app.use("/wechat/index", wechatIndex);
 app.use("/wechat/user/recycle", userRecycle);
 app.use("/wechat/user/home", userHome);
 app.use("/wechat/user/furniture", userFurniture);
+app.use("/wechat/user/collection", userCollection);
 
 app.use("/wechat/merchant/home", merchantHome);
 app.use("/wechat/merchant/certification", merchantCertification);
