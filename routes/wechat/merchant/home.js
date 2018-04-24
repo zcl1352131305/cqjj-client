@@ -200,7 +200,18 @@ router.post('/updPhone', function (req, res, next) {
 });
 
 
-
+//跳转到修改手机号界面
+router.get('/mechantBusinessScops', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/merchant/merchantBusinessScopes/"+ req.query.merchantId,
+            method: 'get',
+        });
+    }).then(function (data) {
+        logger.error('+++++'+JSON.stringify(data))
+        res.json(data)
+    });
+});
 
 
 module.exports = router;

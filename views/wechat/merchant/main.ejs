@@ -219,7 +219,7 @@
         $("#headImg").attr("src",wechatUserInfo.headImgUrl);
         $("#nickname").html(wechatUserInfo.nickName);
         $("#bindingUser").html("当前绑定账号："+wechatUserInfo.adminUsername)
-        merchantAjax({
+        merchantBaseAjax({
             url:"/wechat/merchant/certification/checkIsCertification",
             type:"get",
             data:{
@@ -248,7 +248,7 @@
                 title: '确认解除微信与商户绑定？',
                 text: '解除绑定之后，无法通过微信快速登陆商户账号',
                 onOK: function () {
-                    merchantAjax({
+                    merchantBaseAjax({
                         url:"/wechat/merchant/home/unBinding",
                         type:"get",
                         data:{

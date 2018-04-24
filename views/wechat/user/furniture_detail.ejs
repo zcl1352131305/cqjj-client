@@ -85,7 +85,7 @@
     function checkIsCollection(){
         var userInfo = getGlobalAttribute("userInfo_cqjj");
         var id = '<%=furnitureInfo.id%>';
-        merchantAjax({
+        noAuthBaseAjax({
             url:"/wechat/user/collection/furniture/list",
             type:"get",
             data:{
@@ -115,7 +115,7 @@
     function addCollection(){
         var userInfo = getGlobalAttribute("userInfo_cqjj");
         var furnitureId = '<%=furnitureInfo.id%>';
-        merchantAjax({
+        noAuthBaseAjax({
             url:"/wechat/user/collection/furniture/add",
             type:"post",
             data:{
@@ -133,7 +133,7 @@
     function rmvCollection(id){
         var userInfo = getGlobalAttribute("userInfo_cqjj");
         var furnitureId = '<%=furnitureInfo.id%>';
-        merchantAjax({
+        noAuthBaseAjax({
             url:"/wechat/user/collection/furniture/remove",
             type:"get",
             data:{

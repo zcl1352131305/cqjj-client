@@ -27,7 +27,7 @@
         });
     }
 
-    function merchantAjax(param){
+    function merchantBaseAjax(param){
         $.ajax({
             url:param.url,
             type:param.type,
@@ -53,6 +53,26 @@
                     },2000)
                 }
                 else if(data.code == 1 || data.code == '1'){
+                    $.toptip(data.message, 'error');
+                }
+                else{
+                    param.success(data);
+                }
+            },
+            error:function(e){
+                alert("操作失败!"+JSON.stringify(e));
+            }
+        });
+    }
+
+    function noAuthBaseAjax(param){
+        $.ajax({
+            url:param.url,
+            type:param.type,
+            data:param.data,
+            dataType:"json",
+            success:function(data){
+                if(data.code == 1 || data.code == '1'){
                     $.toptip(data.message, 'error');
                 }
                 else{

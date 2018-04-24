@@ -37,8 +37,20 @@ router.get('/main', function (req, res, next) {
         res.render(ejsPrefix+"main");
     }
 
+});
 
-
+//获取特殊位置信息
+router.get('/specialInfo', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req,  res, {
+            url: constant.BASE_PATH + "/cqjjTrade/specialInfo/list",
+            qs: req.query,
+            method: 'GET'
+        });
+    }).then(function (data) {
+        logger.error("----"+JSON.stringify(data));
+        res.json(data);
+    });
 });
 
 router.get('/personal', function (req, res, next) {

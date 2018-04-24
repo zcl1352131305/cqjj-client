@@ -259,6 +259,10 @@
 <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/swiper.min.js"></script>
 <script>
     $(document).ready(function () {
+        $(".swiper-container").swiper({
+            autoplay:5000,
+            loop:true
+        })
         var userInfo = getGlobalAttribute("userInfo_cqjj");
         if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
             userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
@@ -266,9 +270,8 @@
                 setGlobalAttribute("userInfo_cqjj",JSON.parse(userInfo));
             }
         }
-
-
         init();
+        getSwiperInfo();
     });
 
     function init(){
@@ -288,6 +291,19 @@
             location.href = "/wechat/user/furniture/init?searchTitle="+searchName;
         }
     });
+
+    function getSwiperInfo(){
+        noAuthBaseAjax({
+            url:"/wechat/user/home/specialInfo",
+            type:"get",
+            data:{
+                location:'wx-main-swiper',
+            },
+            success:function(data){
+                alert(JSON.stringify(data))
+            },
+        })
+    }
 
 
 

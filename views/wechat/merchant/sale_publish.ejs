@@ -259,7 +259,7 @@
                         furnitureImg += "," + $(imgs[i]).val()
                     }
                 }
-                merchantAjax({
+                merchantBaseAjax({
                     url:"/wechat/merchant/sale/saveOrUpdate",
                     type:"post",
                     data:{

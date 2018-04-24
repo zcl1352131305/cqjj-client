@@ -77,7 +77,7 @@
     $(document).ready(function () {
         $("#showTooltips").on("click",function(){
             if(check()){
-                merchantAjax({
+                merchantBaseAjax({
                     url:"/wechat/merchant/home/updPhone",
                     type:"post",
                     data:{
@@ -140,7 +140,7 @@
             }
         },1000)
 
-        merchantAjax({
+        merchantBaseAjax({
             url:"/wechat/index/smsCode",
             data:{
                 phone:phone
