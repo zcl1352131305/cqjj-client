@@ -296,26 +296,6 @@
         return true;
     }
 
-    function emptyCheck(column, alert){
-
-        if(isEmpty(column)){
-            $.toptip(alert, 'error');
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    function maxLengthCheck(column, maxLength, alert){
-        if(column.length > maxLength){
-            $.toptip(alert, 'error');
-            return true;
-        }
-        return false;
-    }
-
-
     //图片操作
     function imgOption(){
         $("#uploaderFiles li").on("click",function(){

@@ -18,28 +18,20 @@
     <div class="weui-msg">
         <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
         <div class="weui-msg__text-area">
-            <h2 class="weui-msg__title">发布成功</h2>
-            <p class="weui-msg__desc">家具信息已发布成功！您可以<a href="/wechat/merchant/sale/edit?id=<%=id%>">点击编辑</a></p>
-            <p class="weui-msg__desc">或查看<a href="/wechat/merchant/sale/toMyPublish">我的发布</a></p>
+            <h2 class="weui-msg__title">记账成功</h2>
+            <p class="weui-msg__desc">记账成功！您可以<a href="/wechat/merchant/transaction/account?id=<%=id%>">点击编辑</a></p>
         </div>
         <div class="weui-msg__opr-area">
             <p class="weui-btn-area">
-                <a href="/wechat/merchant/sale/edit" class="weui-btn btncolor">继续发布</a>
+                <a href="/wechat/merchant/transaction/account" class="weui-btn btncolor">继续记账</a>
                 <a href="javascript:void(0)" class="weui-btn weui-btn_default" onclick="location.href='/wechat/merchant/home/main'">返回主页</a>
             </p>
         </div>
-       <!-- <div class="weui-msg__extra-area">
-            <div class="weui-footer">
-                <p class="weui-footer__links">
-                    <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
-                </p>
-                <p class="weui-footer__text">Copyright &copy; 2008-2016 weui.io</p>
-            </div>
-        </div>-->
+
     </div>
 </div>
 </body>
-<%- include('../public/public_js') %>
+<%- include('../../public/public_js') %>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
 </html>

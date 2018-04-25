@@ -118,7 +118,7 @@
     }
 
     function isEmpty(obj){
-        return (obj == null || obj == '')
+        return (obj.trim() == null || obj.trim() == '')
     }
 
     function uuid(len) {
@@ -186,5 +186,27 @@
             enc1 = enc2 = enc3 = enc4 = "";
         } while (i < input.length);
         return output;
+    }
+    function emptyCheck(column, alert){
+
+        if(isEmpty(column)){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    function maxLengthCheck(column, maxLength, alert){
+        if(column.length > maxLength){
+            $.toptip(alert, 'error');
+            return true;
+        }
+        return false;
+    }
+
+    function complexCheck(column, columnName, maxLength){
+        return emptyCheck(column, columnName+"不能为空！") || maxLengthCheck(column, maxLength, columnName+"长度过长！")
     }
 </script>

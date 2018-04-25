@@ -101,7 +101,7 @@
             <div class="grey-area"></div>
             <div class="grids-title">
                 <img src="/static/images/icon/icon-sofa.png" />
-                <div>家具收售</div>
+                <div>收售管理</div>
             </div>
             <div class="weui-grids">
                 <a id="salePublish" href="javascript:void(0);" class="weui-grid">
@@ -122,6 +122,31 @@
                         <img src="/static/images/icon/icon-my_publish.png" alt="">
                     </div>
                     <p class="weui-grid__label">我的发布</p>
+                </a>
+                <a id="transaction" href="javascript:void(0);" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-publish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">出售记账</p>
+                </a>
+
+                <a id="111" href="javascript:void(0);" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-recycle.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">支出记账</p>
+                </a>
+                <a id="222" href="javascript:void(0);" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-my_publish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">记账记录</p>
+                </a>
+                <a id="333" href="javascript:void(0);" class="weui-grid">
+                    <div class="weui-grid__icon">
+                        <img src="/static/images/icon/icon-my_publish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">账单报表</p>
                 </a>
             </div>
 
@@ -288,6 +313,9 @@
         $("#myPublish").on("click",function () {
             location.href = '/wechat/merchant/sale/toMyPublish';
         });
+        $("#transaction").on("click",function(){
+            location.href = '/wechat/merchant/transaction/account';
+        })
 
     }
 

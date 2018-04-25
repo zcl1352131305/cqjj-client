@@ -254,15 +254,20 @@
 
     </div>
 
+    <!-- 轮播图模板 -->
+    <script type="text/html" id="swiperTemplate">
+        {{each result as data}}
+        <div class="swiper-slide" onclick="location.href='{{data.linkUrl}}'">
+            <img src="{{data.headImg}}" alt="{{data.title}}">
+        </div>
+        {{/each}}
+    </script>
 </body>
 <%- include('../public/public_js') %>
 <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/swiper.min.js"></script>
+<script type="text/javascript" src="/static/javascripts/template.js"></script>
 <script>
     $(document).ready(function () {
-        $(".swiper-container").swiper({
-            autoplay:5000,
-            loop:true
-        })
         var userInfo = getGlobalAttribute("userInfo_cqjj");
         if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
             userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
@@ -292,6 +297,7 @@
         }
     });
 
+    //轮播图
     function getSwiperInfo(){
         noAuthBaseAjax({
             url:"/wechat/user/home/specialInfo",
@@ -300,7 +306,13 @@
                 location:'wx-main-swiper',
             },
             success:function(data){
-                alert(JSON.stringify(data))
+                //alert(JSON.stringify(data))
+                var html = template("swiperTemplate",data);
+                $(".swiper-wrapper").html(html);
+                $(".swiper-container").swiper({
+                    autoplay:5000,
+                    loop:true
+                })
             },
         })
     }

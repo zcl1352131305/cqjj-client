@@ -150,7 +150,7 @@
 
 
 </body>
-<%- include('../public/public_js') %>
+<%- include('../../public/public_js') %>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" src="https://unpkg.com/qiniu-js@2.1.2/dist/qiniu.min.js"></script>
 <script type="text/javascript" src="//unpkg.com/crypto-js/crypto-js.js"></script>
@@ -329,26 +329,6 @@
 
         return true;
     }
-
-    function emptyCheck(column, alert){
-
-        if(isEmpty(column)){
-            $.toptip(alert, 'error');
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    function maxLengthCheck(column, maxLength, alert){
-        if(column.length > maxLength){
-            $.toptip(alert, 'error');
-            return true;
-        }
-        return false;
-    }
-
 
     //图片操作
     function imgOption(){

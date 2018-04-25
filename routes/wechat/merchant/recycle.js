@@ -11,7 +11,7 @@ var Promise = require("bluebird");
 var logger = require("../../../lib/common").logger("wechatUser");
 
 //ejs文件路径前缀
-var ejsPrefix = 'wechat/merchant/';
+var ejsPrefix = 'wechat/merchant/recycle/';
 
 
 //商户初始化，判断商户是否绑定后台账户
