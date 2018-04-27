@@ -30,11 +30,12 @@
 <div class="wechat-content">
     <form id="form" action="" method="post">
         <input type="hidden" id="id" value="<%=transaction.id%>">
+        <input type="hidden" id="userId" value="<%=transaction.adminId%>">
         <div class="weui-cells__title">出售明细</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea id="tradingDetail" class="weui-textarea" rows="3" placeholder="请填写出售明细，具体出售家具、数量等"></textarea>
+                    <textarea id="tradingDetail" class="weui-textarea" rows="3" placeholder="请填写出售明细，具体出售家具、数量等"><%=transaction.tradingDetail%></textarea>
                 </div>
             </div>
         </div>
@@ -45,33 +46,33 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">出售总价</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="totalPrice" type="number" placeholder="请填写出售总价" />
+                    <input class="weui-input" id="totalPrice" type="number" placeholder="请填写出售总价" value="<%=transaction.totalPrice%>" />
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">交易方式</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="tradeType" type="hidden" />
+                    <input class="weui-input" id="tradeType" type="hidden" value="<%=transaction.tradeType%>" />
                     <input class="weui-input" id="tradeTypeName" type="text" readonly placeholder="请选择交易方式" />
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">支付方式</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="payType" type="hidden" />
+                    <input class="weui-input" id="payType" type="hidden" value="<%=transaction.payType%>" />
                     <input class="weui-input" id="payTypeName" type="text" readonly placeholder="请选择支付方式" />
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">收款人</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="payee" type="text" placeholder="请填写收款人" />
+                    <input class="weui-input" id="payee" type="text" placeholder="请填写收款人" value="<%=transaction.payee%>" />
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">交易日期</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="tradingTime" type="text" readonly placeholder="请选择交易日期" />
+                    <input class="weui-input" id="tradingTime" type="text" readonly placeholder="请选择交易日期" value="<%=transaction.tradingTime != null?transaction.tradingTime.substring(0,10):''%>" />
                 </div>
             </div>
             <!--<div class="weui-cell">
@@ -93,36 +94,36 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">定金</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="deposit" type="number" placeholder="请填写顾客所交定金" />
+                    <input class="weui-input" id="deposit" type="number" placeholder="请填写顾客所交定金" value="<%=transaction.deposit%>" />
                 </div>
             </div>
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">尾款支付方式</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="balancePayType" type="hidden" />
-                    <input class="weui-input" id="balancePayTypeName" type="text" readonly placeholder="请选择尾款支付方式" />
+                    <input class="weui-input" id="balancePayType" type="hidden"  value="<%=transaction.balancePayType%>" />
+                    <input class="weui-input" id="balancePayTypeName" type="text" readonly placeholder="请选择尾款支付方式"  />
                 </div>
             </div>
 
             <div class="weui-cell balanceBringPeople" style="display: none;">
                 <div class="weui-cell__hd"><label class="weui-label">委托带回人</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="balanceBringPeople" type="text" placeholder="请填写尾款带回的人" />
+                    <input class="weui-input" id="balanceBringPeople" type="text" placeholder="请填写尾款带回的人" value="<%=transaction.balanceBringPeople%>" />
                 </div>
             </div>
 
             <div class="weui-cell weui-cell_switch">
                 <div class="weui-cell__bd">尾款是否收完</div>
                 <div class="weui-cell__ft">
-                    <input class="weui-switch" id="balanceIsFinish" type="checkbox">
+                    <input class="weui-switch" id="balanceIsFinish" type="checkbox" <%=transaction.balanceIsFinish == 1?'checked':''%>>
                 </div>
             </div>
 
             <div class="weui-cell balanceAlreadyGathering">
                 <div class="weui-cell__hd"><label class="weui-label">已收尾款</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="balanceAlreadyGathering" type="number" placeholder="请填写已收尾款" />
+                    <input class="weui-input" id="balanceAlreadyGathering" type="number" placeholder="请填写已收尾款" value="<%=transaction.balanceAlreadyGathering%>"/>
                 </div>
             </div>
 
@@ -130,14 +131,14 @@
             <div class="weui-cell balanceFinishTime" style="display: none;">
                 <div class="weui-cell__hd"><label class="weui-label">收完日期</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="balanceFinishTime" type="text" readonly placeholder="请选择尾款收完日期" />
+                    <input class="weui-input" id="balanceFinishTime" type="text" readonly placeholder="请选择尾款收完日期" value="<%=transaction.balanceFinishTime != null?transaction.balanceFinishTime.substring(0,10):''%>" />
                 </div>
             </div>
 
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">尾款收款人</label></div>
+            <div class="weui-cell balancePayee">
+                <div class="weui-cell__hd"><label class="weui-label ">尾款收款人</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="balancePayee" type="text" placeholder="请填写尾款收款人" />
+                    <input class="weui-input" id="balancePayee" type="text" placeholder="请填写尾款收款人" value="<%=transaction.balancePayee%>" />
                 </div>
             </div>
 
@@ -169,6 +170,10 @@
         $("#balanceFinishTime").calendar({
             dateFormat: 'yyyy-mm-dd'
         });
+
+        var userInfo = getGlobalAttribute("wechatUserInfo");
+        $("#userId").val(userInfo.merchantAdminId);
+        changeCheckState();
     });
 
     var isClick = true;//防止重复点击
@@ -180,6 +185,7 @@
                 type:"post",
                 data:{
                     id:$("#id").val(),
+                    adminId:$("#userId").val(),
                     tradingDetail:$("#tradingDetail").val(),
                     totalPrice:$("#totalPrice").val(),
                     tradeType: $("#tradeType").val(),
@@ -197,7 +203,14 @@
                 },
                 success:function(data){
                     if(data.code == '0' || data.code == 0){
-                        location.href = "/wechat/merchant/transaction/toAccountSuccess?id="+data.result;
+                        var target = '<%=target%>';
+                        if(target == 'list'){
+                            location.href = "/wechat/merchant/transaction/toAccountRecordList";
+                        }
+                        else{
+                            location.href = "/wechat/merchant/transaction/toAccountSuccess?id="+data.result;
+                        }
+
                     }
                     else{
                         isClick = true;
@@ -233,12 +246,17 @@
         if(complexCheck(tradingTime, "交易日期", 20)) return false;
         if(tradeType == 2 || tradeType == '2'){
             if(complexCheck(deposit, "定金", 50)) return false;
+            if(parseInt(totalPrice) - parseInt(deposit) <= 0){
+                $.toptip("定金数值不能超过总价！", 'error');
+                return false;
+            }
             if(complexCheck(balancePayType, "尾款支付方式", 1)) return false;
             if(balancePayType == 1 || balancePayType == '1'){
                 if(complexCheck(balanceBringPeople, "委托带回人", 50)) return false;
             }
             if(balanceIsFinish == 1){
                 if(complexCheck(balanceFinishTime, "尾款收完日期", 20)) return false;
+                if(complexCheck(balancePayee, "尾款收款人", 50)) return false;
             }
             else{
                 var needGathering = parseInt(totalPrice) - parseInt(deposit);
@@ -247,7 +265,7 @@
                     return false;
                 }
             }
-            if(complexCheck(balancePayee, "尾款收款人", 50)) return false;
+
 
         }
 
@@ -257,6 +275,11 @@
 
 
     function tradeTypeSelectInit(){
+        var tradeTypeInit = '<%=transaction.tradeType%>';
+        switch (tradeTypeInit){
+            case '1': $("#tradeTypeName").val("全款");break;
+            case '2': $("#tradeTypeName").val("定金-尾款");$(".balanceAbout").css("display","block");break;
+        }
         $("#tradeTypeName").select({
             title: "请选择交易方式",
             items: [{
@@ -273,17 +296,23 @@
                 $("#tradeType").val(tradeType);
                 if(tradeType == '2'){
                     $(".balanceAbout").css("display","block");
-                    $(".balanceAbout").find("input").attr("disabled","disabled");
                 }
                 else{
                     $(".balanceAbout").css("display","none");
-                    $(".balanceAbout").removeAttr("disabled");
                 }
             }
         });
     }
 
     function payTypeSelectInit(){
+        var payTypeInit = '<%=transaction.payType%>';
+        switch (payTypeInit){
+            case '1': $("#payTypeName").val("现金");break;
+            case '2': $("#payTypeName").val("支付宝");break;
+            case '3': $("#payTypeName").val("微信");break;
+            case '4': $("#payTypeName").val("银行卡");break;
+            case '5': $("#payTypeName").val("其它");break;
+        }
         $("#payTypeName").select({
             title: "请选择支付方式",
             items: [{
@@ -315,6 +344,15 @@
     }
 
     function balancePayTypeSelectInit(){
+        var balancePayTypeInit = '<%=transaction.balancePayType%>';
+        switch (balancePayTypeInit){
+            case '1': $("#balancePayTypeName").val("托人带回");$(".balanceBringPeople").show();break;
+            case '2': $("#balancePayTypeName").val("支付宝");break;
+            case '3': $("#balancePayTypeName").val("微信");break;
+            case '4': $("#balancePayTypeName").val("银行卡");break;
+            case '5': $("#balancePayTypeName").val("其它");break;
+        }
+
         $("#balancePayTypeName").select({
             title: "请选择尾款支付方式",
             items: [{
@@ -343,26 +381,30 @@
                 $("#balancePayType").val(balancePayType);
                 if(balancePayType == '1'){
                     $(".balanceBringPeople").show();
-                    $("#balanceBringPeople").removeAttr("disabled");
                 }
                 else{
                     $(".balanceBringPeople").hide();
-                    $("#balanceBringPeople").attr("disabled","disabled");
                 }
             }
         });
     }
 
     $("#balanceIsFinish").on("change",function(){
+        changeCheckState();
+    })
+
+    function changeCheckState(){
         if($("#balanceIsFinish").is(":checked")){
             $(".balanceAlreadyGathering").hide();
             $(".balanceFinishTime").show();
+            $(".balancePayee").show();
             $("#balanceAlreadyGathering").attr("disabled","disabled");
             $("#balanceFinishTime").removeAttr("disabled");
         }
         else{
             $(".balanceAlreadyGathering").show();
             $(".balanceFinishTime").hide();
+            $(".balancePayee").hide();
             $("#balanceAlreadyGathering").removeAttr("disabled");
             $("#balanceFinishTime").attr("disabled","disabled");
             var alreadyGathering = $("#balanceAlreadyGathering").val();
@@ -371,7 +413,7 @@
             }
 
         }
-    })
+    }
 
 </script>
 </html>

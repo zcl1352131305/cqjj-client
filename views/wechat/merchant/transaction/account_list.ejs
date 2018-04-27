@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat-mall-list.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+
+        .wechat-content{
+            width: 100%;
+            margin-top: 50px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .weui-search-bar:after, .weui-search-bar:before{
+            content: none;
+        }
+        .weui-media-box{
+
+            background: #FFF;
+        }
+        .weui-panel{
+            background: #f1f1f1;
+        }
+        .wechat-content-state{
+            font-size: 16px;
+        }
+        .weui-media-box{
+            border-bottom: 1px solid #f4f4f4;
+        }
+        .wechat-bottom{
+            width: 100%;
+            height: 50px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+        .wechat-bottom button{
+            float: right;
+            width: auto;
+            height: 34px;
+            border-radius: 5px;
+            background: #fff;
+            padding-left: 5px;
+            padding-right: 5px;
+            margin-top: 7px;
+            margin-right: 10px;
+            min-width: 70px;
+        }
+        .weui-tabbar:before{
+            border-top: 1px solid #c0bfc4;
+
+        }
+        .weui-tabbar__item{
+            font-size: 14px;
+            line-height: 50px;
+            padding: 0;
+            color:#fff
+        }
+        .weui-tab__bd{
+            height: calc(100vh - 100px);
+        }
+        .date-calendar{
+            border:none;
+            width: 90px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .wechat-content-price-balance{
+            font-size: 12px;
+            color: #999;
+            margin-left: 10px;
+        }
+        .weui-media-box__bd{
+            height: auto !important;
+        }
+        .weui-media-box__title{
+            height: auto;
+            line-height: 20px;
+        }
+       
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1><i class="fa fa-chevron-left" onclick="toYesterday()"></i>&nbsp;&nbsp;<input class="date-calendar" id="searchDate" readonly >&nbsp;&nbsp;<i class="fa fa-chevron-right" onclick="toTomorrow()"></i></h1>
+</header>
+
+
+<div class="wechat-content">
+    <div class="weui-tab">
+        <div class="weui-tab__bd">
+            <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                <div id="transactionPanel" class="weui-panel weui-panel_access">
+                    <div class="weui-panel__bd" id="transactionAccountList">
+
+                    </div>
+                    <div id="transactionNoDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;background: #fff">
+                        <span class="weui-loadmore__tips">暂无数据</span>
+                    </div>
+                </div>
+            </div>
+            <div id="tab2" class="weui-tab__bd-item">
+                <div id="purchasePanel" class="weui-panel weui-panel_access">
+                    <div class="weui-panel__bd" id="purchaseAccountList">
+
+                    </div>
+                    <div id="purchaseNoDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;background: #fff">
+                        <span class="weui-loadmore__tips">暂无数据</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-tabbar bgcolor" style="height: 50px;">
+            <a href="#tab1" class="weui-tabbar__item weui-bar__item--on">
+                销售记录
+            </a>
+            <a href="#tab2" class="weui-tabbar__item">
+               支出记录
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="transactionAccountListTemplate">
+    {{each result as data i}}
+    <div class="column" id="transactionColumn_{{data.id}}" style="width: 100%;height: auto;float: left;">
+        <div class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">{{data.tradingDetail}}</h4>
+                <div class="wechat-content-option" style="">
+                    <div class="wechat-content-price">¥{{data.totalPrice}}.00<span class="wechat-content-price-balance">
+                            {{if data.tradeType == '1'}}
+                                全款
+                            {{else}}
+                                {{if data.balanceIsFinish == '1'}}
+                                    尾款已收完
+                                {{else}}
+                                    ¥{{data.totalPrice - data.deposit - data.balanceAlreadyGathering}}尾款待收
+                                {{/if}}
+                            {{/if}}
+
+                        </span></div>
+                </div>
+                <p class="wechat-content-address"><i class="fa fa-clock-o"></i> {{data.tradingTime}}</p>
+            </div>
+        </div>
+        <div class="wechat-bottom">
+            <button class="bdcolor textcolor" onclick="delTransactionAccount('{{data.id}}')">删除</button>
+            <button class="bdcolor textcolor" onclick="toUpdate('{{data.id}}')">修改</button>
+        </div>
+    </div>
+    {{/each}}
+</script>
+</body>
+<%- include('../../public/public_js') %>
+<script type="text/javascript" src="/static/javascripts/template.js"></script>
+<script>
+    $(".icon-back").on("click",function(){
+        location.href="/wechat/merchant/home/main"
+    })
+
+    var userId;
+    $(document).ready(function(){
+
+        //先前搜索条件
+        var preSearchCondition = getGlobalAttribute("accountListSearchCondition");
+        if(null != preSearchCondition && null != preSearchCondition.tradingTime){
+            $("#searchDate").val(preSearchCondition.tradingTime);
+            rmvGlobalAttribute("accountListSearchCondition",null);
+        }
+        else{
+            var date = dateFormat(new Date());
+            $("#searchDate").val(date);
+        }
+
+
+
+        var userInfo = getGlobalAttribute("wechatUserInfo");
+        userId = userInfo.merchantAdminId;
+        loadData();
+        $("#searchDate").calendar({
+            dateFormat: 'yyyy-mm-dd',
+            onDayClick:function(p, dayContainer, year, month, day){
+                month ++ ;
+                if(month < 10) month = "0"+month;
+                if(day < 10) day = "0"+day;
+                $("#searchDate").val(year + '-' + month + '-' + day);
+                loadData();
+            }
+        });
+    })
+
+    function loadData(){
+        merchantBaseAjax({
+            url:"/wechat/merchant/transaction/accountRecordList",
+            type:"get",
+            data:{
+                adminId:userId,
+                tradingTime:$("#searchDate").val()
+            },
+            success:function(data){
+                if(data.result.length <= 0){
+                    showNodata("transaction");
+                }
+                else{
+                    showHasData("transaction");
+                    data.result.forEach(function (value) {
+                        value.totalPrice = parseInt(value.totalPrice)
+                        value.deposit = parseInt(value.deposit)
+                        value.balanceAlreadyGathering = parseInt(value.balanceAlreadyGathering)
+                    })
+                    var html = template("transactionAccountListTemplate",data);
+                    $("#transactionAccountList").html(html);
+                    $(".wechat-bottom:last").css("margin-bottom","0");
+                }
+            }
+        });
+    }
+
+
+    function showNodata(module){
+        $("#"+module+"AccountList").html("");
+        $("#"+module+"NoDataPanel").show();
+        $("#"+module+"Panel").css("background","#fff");
+    }
+
+    function showHasData(module){
+        $("#"+module+"NoDataPanel").hide();
+        $("#"+module+"Panel").css("background","#f1f1f1");
+    }
+
+
+    function  dateFormat(date) {
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        if(month < 10) month = "0"+month;
+        if(day < 10) day = "0"+day;
+        return year + '-'+month+'-'+day;
+    }
+
+    function toYesterday(){
+        var now = new Date($("#searchDate").val());
+        var nowTime = now.getTime();
+        var yesterdayTime = nowTime - 1000*60*60*24;
+        var yesterday = new Date(yesterdayTime)
+        $("#searchDate").val(dateFormat(yesterday));
+        loadData()
+    }
+
+    function toTomorrow(){
+        var now = new Date($("#searchDate").val());
+        var nowTime = now.getTime();
+        var tomorrowTime = nowTime + 1000*60*60*24;
+        var tomorrow = new Date(tomorrowTime)
+
+        var today = new Date().getTime();
+        $("#searchDate").val(dateFormat(tomorrow));
+        loadData()
+
+    }
+
+    function toUpdate(id){
+        setGlobalAttribute("accountListSearchCondition",{
+            tradingTime: $("#searchDate").val()
+        })
+        location.href='/wechat/merchant/transaction/account?id='+id+'&target=list'
+    }
+
+    function delTransactionAccount(id){
+        $.confirm({
+            title: '确认删除？',
+            text: '删除之后无法恢复！请谨慎操作！',
+            onOK: function () {
+                merchantBaseAjax({
+                    url:"/wechat/merchant/transaction/deleteAccountRecord",
+                    type:"get",
+                    data:{
+                        id:id
+                    },
+                    success:function(data){
+                        $('#transactionColumn_'+id).remove();
+                        $.toptip("删除成功！", 'success');
+                    },
+                })
+            },
+            onCancel: function () {
+            }
+        });
+    }
+
+
+</script>
+</html>

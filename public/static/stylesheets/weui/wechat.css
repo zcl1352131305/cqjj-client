@@ -87,3 +87,6 @@ header .icon-back{
 .weui-icon-success{
 	color: #1AB394 ;
 }
+.weui-bar__item--on{
+	background: #27a088 ;
+}

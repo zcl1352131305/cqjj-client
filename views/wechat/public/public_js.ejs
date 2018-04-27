@@ -117,6 +117,11 @@
         localStorage.setItem(name, JSON.stringify(jsonObj));
     }
 
+    function rmvGlobalAttribute(name) {
+        localStorage.removeItem(name);
+    }
+
+
     function isEmpty(obj){
         return (obj.trim() == null || obj.trim() == '')
     }
@@ -209,4 +214,5 @@
     function complexCheck(column, columnName, maxLength){
         return emptyCheck(column, columnName+"不能为空！") || maxLengthCheck(column, maxLength, columnName+"长度过长！")
     }
+
 </script>
