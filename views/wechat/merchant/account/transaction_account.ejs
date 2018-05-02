@@ -57,16 +57,16 @@
                 </div>
             </div>
             <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">收款人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="payee" type="text" placeholder="请填写收款人" value="<%=transaction.payee%>" />
+                </div>
+            </div>
+            <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">支付方式</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" id="payType" type="hidden" value="<%=transaction.payType%>" />
                     <input class="weui-input" id="payTypeName" type="text" readonly placeholder="请选择支付方式" />
-                </div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">收款人</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" id="payee" type="text" placeholder="请填写收款人" value="<%=transaction.payee%>" />
                 </div>
             </div>
             <div class="weui-cell">
@@ -181,7 +181,7 @@
         if(check() && isClick){
             isClick = false;
             merchantBaseAjax({
-                url:"/wechat/merchant/transaction/saveOrUpdate",
+                url:"/wechat/merchant/account/sale/saveOrUpdate",
                 type:"post",
                 data:{
                     id:$("#id").val(),
@@ -205,10 +205,10 @@
                     if(data.code == '0' || data.code == 0){
                         var target = '<%=target%>';
                         if(target == 'list'){
-                            location.href = "/wechat/merchant/transaction/toAccountRecordList";
+                            location.href = "/wechat/merchant/account/toAccountRecordList";
                         }
                         else{
-                            location.href = "/wechat/merchant/transaction/toAccountSuccess?id="+data.result;
+                            location.href = "/wechat/merchant/account/sale/toAccountSuccess?id="+data.result;
                         }
 
                     }

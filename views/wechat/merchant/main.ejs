@@ -157,7 +157,7 @@
                     <p class="weui-grid__label">账单报表</p>
                 </a>
                 <a id="needGathering" href="javascript:void(0);" class="weui-grid">
-                    <span class="weui-badge" style="position: absolute;top: .2em;right: 2em;">8</span>
+                    <span id="needGatheringBadge" class="weui-badge" style="position: absolute;top: .2em;right: 2em;display: none"></span>
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-my_publish.png" alt="">
                     </div>
@@ -248,7 +248,7 @@
 <script>
 
 
-    var accessToken;
+    var accessToken, adminUserId;
     $(document).ready(function () {
         checkIsCertification();
     });
@@ -256,6 +256,7 @@
     //检验账户是否验证
     function checkIsCertification(){
         var wechatUserInfo = getGlobalAttribute("wechatUserInfo");
+        adminUserId = wechatUserInfo.merchantAdminId;
         $("#headImg").attr("src",wechatUserInfo.headImgUrl);
         $("#nickname").html(wechatUserInfo.nickName);
         $("#bindingUser").html("当前绑定账号："+wechatUserInfo.adminUsername)
@@ -329,15 +330,43 @@
             location.href = '/wechat/merchant/sale/toMyPublish';
         });
         $("#transactionAccount").on("click",function(){
-            location.href = '/wechat/merchant/transaction/account';
+            location.href = '/wechat/merchant/account/sale';
         });
         $("#accountRecord").on("click",function(){
-            location.href = '/wechat/merchant/transaction/toAccountRecordList';
+            location.href = '/wechat/merchant/account/toAccountRecordList';
         });
         $("#needGathering").on("click",function(){
-            location.href = '/wechat/merchant/transaction/toNeedGathering';
+            location.href = '/wechat/merchant/account/toNeedGathering';
         })
+        getNeedGatheringCount();
+    }
 
+
+    function getNeedGatheringCount(){
+        merchantBaseAjax({
+            url:"/wechat/merchant/account/needGatheringCount",
+            type:"get",
+            data:{
+                adminId:adminUserId,
+                tradeType:'2',
+                balanceIsFinish: '0'
+            },
+            success:function(data){
+                if(data.code == 0 || data.code == '0'){
+                    if(null != data.result && parseInt(data.result) > 0){
+                        $("#needGatheringBadge").html(data.result);
+                        $("#needGatheringBadge").show();
+                    }
+                    else{
+                        $("#needGatheringBadge").hide();
+                    }
+                }
+                else{
+                    //$.toptip(data.message, 'error');
+                    $("#needGatheringBadge").hide();
+                }
+            },
+        })
     }
 
     function onAuthHandle(){

@@ -41,7 +41,7 @@ var merchantHome = require('./routes/wechat/merchant/home');
 var merchantCertification = require('./routes/wechat/merchant/certification');
 var merchantRecycle = require('./routes/wechat/merchant/recycle');
 var merchantSale =  require('./routes/wechat/merchant/sale');
-var merchantTransaction =  require('./routes/wechat/merchant/transaction');
+var merchantAccount =  require('./routes/wechat/merchant/account');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -68,7 +68,7 @@ app.use("/wechat/merchant/home", merchantHome);
 app.use("/wechat/merchant/certification", merchantCertification);
 app.use("/wechat/merchant/recycle", merchantRecycle);
 app.use("/wechat/merchant/sale", merchantSale);
-app.use("/wechat/merchant/transaction", merchantTransaction);
+app.use("/wechat/merchant/account", merchantAccount);
 app.use("/qiniu", qiniu);
 
 

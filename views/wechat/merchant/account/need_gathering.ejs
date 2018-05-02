@@ -99,7 +99,7 @@
 <body>
 <header class="wechat-header">
     <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
-    <h1>待收款</h1>
+    <h1>待收尾款</h1>
 </header>
 
 
@@ -122,7 +122,7 @@
             <div class="weui-media-box__bd">
                 <h4 class="weui-media-box__title">{{data.tradingDetail}}</h4>
                 <div class="wechat-content-option" style="">
-                    <div class="wechat-content-price">¥{{data.totalPrice}}.00<span class="wechat-content-price-balance">
+                    <div class="wechat-content-price">¥{{data.totalPrice}}<span class="wechat-content-price-balance">
                             ¥{{data.totalPrice - data.deposit - data.balanceAlreadyGathering}}尾款待收
                             {{if data.balancePayType == '1'}}
                             ,委托带回人：{{data.balanceBringPeople}}
@@ -158,7 +158,7 @@
 
     function loadData(){
         merchantBaseAjax({
-            url:"/wechat/merchant/transaction/accountRecordList",
+            url:"/wechat/merchant/account/sale/accountRecordList",
             type:"get",
             data:{
                 adminId:userId,
@@ -219,7 +219,7 @@
                         var balanceFinishTime = $("#balanceFinishTime").val();
                         if(!complexCheck(balancePayee, "收款人", 50) && !complexCheck(balanceFinishTime, "收款日期", 20)){
                             merchantBaseAjax({
-                                url: "/wechat/merchant/transaction/updateAccountRecord",
+                                url: "/wechat/merchant/account/updateNeedGathering",
                                 type: "post",
                                 data: {
                                     id: id,
@@ -244,37 +244,6 @@
             dateFormat: 'yyyy-mm-dd'
         });
 
-
-        /*$.prompt({
-            title: '收完尾款',
-            text: '请确认收完尾款，并填写尾款收款人',
-            balancePayee: '尾款收款人',
-            balanceFinishTime: dateFormat(new Date()),
-            empty: false, // 是否允许为空
-            onOK: function (balancePayee,balanceFinishTime) {
-                if(!complexCheck(balancePayee, "收款人", 50) && checkDateTime(balanceFinishTime)){
-                    merchantBaseAjax({
-                        url: "/wechat/merchant/transaction/updateAccountRecord",
-                        type: "post",
-                        data: {
-                            id: id,
-                            balanceIsFinish: '1',
-                            balanceAlreadyGathering: gatheringMoney,
-                            balanceFinishTime: $("#balanceFinishTime").val(),
-                            balancePayee: balancePayee
-                        },
-                        success: function (data) {
-
-
-                        }
-                    });
-                }
-
-            },
-            onCancel: function () {
-                //点击取消
-            }
-        });*/
     }
 
     function initDateChoose(obj){

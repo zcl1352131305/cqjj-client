@@ -139,7 +139,7 @@
             <div class="weui-media-box__bd">
                 <h4 class="weui-media-box__title">{{data.tradingDetail}}</h4>
                 <div class="wechat-content-option" style="">
-                    <div class="wechat-content-price">¥{{data.totalPrice}}.00<span class="wechat-content-price-balance">
+                    <div class="wechat-content-price">¥{{data.totalPrice}}<span class="wechat-content-price-balance">
                             {{if data.tradeType == '1'}}
                                 全款
                             {{else}}
@@ -203,7 +203,7 @@
 
     function loadData(){
         merchantBaseAjax({
-            url:"/wechat/merchant/transaction/accountRecordList",
+            url:"/wechat/merchant/account/sale/accountRecordList",
             type:"get",
             data:{
                 adminId:userId,
@@ -275,7 +275,7 @@
         setGlobalAttribute("accountListSearchCondition",{
             tradingTime: $("#searchDate").val()
         })
-        location.href='/wechat/merchant/transaction/account?id='+id+'&target=list'
+        location.href='/wechat/merchant/account/sale?id='+id+'&target=list'
     }
 
     function delTransactionAccount(id){
@@ -284,7 +284,7 @@
             text: '删除之后无法恢复！请谨慎操作！',
             onOK: function () {
                 merchantBaseAjax({
-                    url:"/wechat/merchant/transaction/deleteAccountRecord",
+                    url:"/wechat/merchant/account/sale/deleteAccountRecord",
                     type:"get",
                     data:{
                         id:id
