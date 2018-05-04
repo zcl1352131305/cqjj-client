@@ -93,95 +93,14 @@
 <body>
 <header class="wechat-header">
     <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
-    <h1><i class="fa fa-chevron-left" onclick="toYesterday()"></i>&nbsp;&nbsp;<input class="date-calendar" id="searchDate" readonly >&nbsp;&nbsp;<i class="fa fa-chevron-right" onclick="toTomorrow()"></i></h1>
+    <h1>统计报表</h1>
 </header>
 
 
 <div class="wechat-content">
-    <div class="weui-tab">
-        <div class="weui-tab__bd">
-            <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
-                <div id="salePanel" class="weui-panel weui-panel_access">
-                    <div class="weui-panel__bd" id="saleAccountList">
-
-                    </div>
-                    <div id="saleNoDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;background: #fff">
-                        <span class="weui-loadmore__tips">暂无数据</span>
-                    </div>
-                </div>
-            </div>
-            <div id="tab2" class="weui-tab__bd-item">
-                <div id="spendPanel" class="weui-panel weui-panel_access">
-                    <div class="weui-panel__bd" id="spendAccountList">
-
-                    </div>
-                    <div id="spendNoDataPanel" class="weui-loadmore weui-loadmore_line" style="display: none;background: #fff">
-                        <span class="weui-loadmore__tips">暂无数据</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="weui-tabbar bgcolor" style="height: 50px;">
-            <a href="#tab1" id="tab1Btn" class="weui-tabbar__item weui-bar__item--on">
-                销售记录
-            </a>
-            <a href="#tab2" id="tab2Btn" class="weui-tabbar__item">
-               支出记录
-            </a>
-        </div>
-    </div>
+    <div class=""></div>
 </div>
 
-<script type="text/html" id="saleAccountListTemplate">
-    {{each result as data i}}
-    <div class="column" id="saleColumn_{{data.id}}" style="width: 100%;height: auto;float: left;">
-        <div class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title">{{data.tradingDetail}}</h4>
-                <div class="wechat-content-option" style="">
-                    <div class="wechat-content-price">¥{{data.totalPrice}}<span class="wechat-content-price-balance">
-                            {{if data.tradeType == '1'}}
-                                全款
-                            {{else}}
-                                {{if data.balanceIsFinish == '1'}}
-                                    尾款已收完
-                                {{else}}
-                                    ¥{{data.totalPrice - data.deposit - data.balanceAlreadyGathering}}尾款待收
-                                {{/if}}
-                            {{/if}}
-
-                        </span></div>
-                </div>
-                <p class="wechat-content-address"><i class="fa fa-clock-o"></i> {{data.tradingTime}}</p>
-            </div>
-        </div>
-        <div class="wechat-bottom">
-            <button class="bdcolor textcolor" onclick="delSaleAccount('{{data.id}}')">删除</button>
-            <button class="bdcolor textcolor" onclick="toSaleUpdate('{{data.id}}')">修改</button>
-        </div>
-    </div>
-    {{/each}}
-</script>
-
-<script type="text/html" id="spendAccountListTemplate">
-    {{each result as data i}}
-    <div class="column" id="spendColumn_{{data.id}}" style="width: 100%;height: auto;float: left;">
-        <div class="weui-media-box weui-media-box_appmsg">
-            <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title">{{data.tradingDetail}}</h4>
-                <div class="wechat-content-option" style="">
-                    <div class="wechat-content-price">¥{{data.totalPrice}}<span class="wechat-content-price-balance"></span></div>
-                </div>
-                <p class="wechat-content-address"><i class="fa fa-clock-o"></i> {{data.tradingTime}}</p>
-            </div>
-        </div>
-        <div class="wechat-bottom">
-            <button class="bdcolor textcolor" onclick="delSpendAccount('{{data.id}}')">删除</button>
-            <button class="bdcolor textcolor" onclick="toSpendUpdate('{{data.id}}')">修改</button>
-        </div>
-    </div>
-    {{/each}}
-</script>
 </body>
 <%- include('../../public/public_js') %>
 <script type="text/javascript" src="/static/javascripts/template.js"></script>
