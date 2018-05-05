@@ -268,8 +268,9 @@
 <script type="text/javascript" src="/static/javascripts/template.js"></script>
 <script>
     $(document).ready(function () {
+
         var userInfo = getGlobalAttribute("userInfo_cqjj");
-        if(isEmpty(userInfo) || JSON.stringify(userInfo) == '{}'){
+        if(userInfo == null || JSON.stringify(userInfo) == '{}'){
             userInfo = '<%- (typeof(userInfo) == 'undefined' || userInfo == null)?'':JSON.stringify(userInfo)%>';
             if(!isEmpty(userInfo) && userInfo != '{}'){
                 setGlobalAttribute("userInfo_cqjj",JSON.parse(userInfo));

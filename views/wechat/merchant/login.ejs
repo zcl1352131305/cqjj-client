@@ -27,7 +27,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">登陆密码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="password" name="password" type="password" value="" placeholder="请输入6位登陆密码" />
+                    <input class="weui-input" id="password" name="password" type="number" value="" placeholder="请输入6位登陆密码" style="-webkit-text-security:disc" />
                 </div>
             </div>
 
@@ -55,6 +55,7 @@
 
 
     $(document).ready(function () {
+        $("#password").trigger("click").focus();
         var id = '<%=id%>';
         if(null == id || '' == id){
             var wechatUserInfo = getGlobalAttribute("wechatUserInfo");

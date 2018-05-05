@@ -52,21 +52,21 @@
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
             <div class="weui-cell__bd">
-                <input id="validateCode" class="weui-input" type="text" placeholder="输入验证码" />
+                <input id="validateCode" class="weui-input" type="number" placeholder="输入验证码" />
             </div>
         </div>
 
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">输入密码</label></div>
             <div class="weui-cell__bd">
-                <input id="password" class="weui-input" type="password" placeholder="请输入密码" />
+                <input id="password" class="weui-input" type="number" placeholder="请输入密码" style="-webkit-text-security:disc"  />
             </div>
         </div>
 
         <div class="weui-cell">
             <div class="weui-cell__hd"><label class="weui-label">再次输入</label></div>
             <div class="weui-cell__bd">
-                <input id="confirmPassword" class="weui-input" type="password" placeholder="请再次输入" />
+                <input id="confirmPassword" class="weui-input" type="number" placeholder="请再次输入" style="-webkit-text-security:disc"  />
             </div>
         </div>
     </div>
@@ -214,6 +214,18 @@
     function sendCodeChange(){
 
     }
+
+
+    $("#password").on("input",function(){
+        if($(this).val().length > 6){
+            $(this).val($(this).val().substring(0,6))
+        }
+    })
+    $("#confirmPassword").on("input",function(){
+        if($(this).val().length > 6){
+            $(this).val($(this).val().substring(0,6))
+        }
+    })
 
 
 </script>

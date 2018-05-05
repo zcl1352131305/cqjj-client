@@ -65,7 +65,7 @@
 
     <div class="wechat-foot">
         <div id="collect" class="wechat-foot-collect" style="background: #ddd;" onclick="addCollection()">加入收藏</div>
-        <div class="wechat-foot-collect btncolor">立即联系</div>
+        <a href="tel:<%=merchantInfo.phone%>" style="text-decoration: none;color: #fff;"><div class="wechat-foot-collect btncolor">立即联系</div></a>
     </div>
 </body>
 <%- include('../public/public_js') %>

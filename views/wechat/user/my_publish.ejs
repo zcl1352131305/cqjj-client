@@ -229,12 +229,12 @@
             success:function(data){
                 if(isShow == '1' || isShow == 1){
                     $(btn).html("隐藏");
-                    $(btn).attr("onclick","updState('"+id+"','0',this)")
+                    $(btn).attr("onclick","updPublish('"+id+"','0',this)")
                     $("#showFlag_"+id).html('<span class="textcolor">显示中</span>');
                 }
                 else{
                     $(btn).html("显示");
-                    $(btn).attr("onclick","updState('"+id+"','1',this)")
+                    $(btn).attr("onclick","updPublish('"+id+"','1',this)")
                     $("#showFlag_"+id).html('<span style="color: #ca4440;">未显示</span>');
                 }
             },

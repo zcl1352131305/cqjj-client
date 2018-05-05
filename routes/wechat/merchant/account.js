@@ -213,4 +213,12 @@ router.get('/needGatheringCount', function (req, res, next) {
     });
 });
 
+
+
+
+/** 记账统计 */
+router.get('/toStatistical', function (req, res, next) {
+    res.render(ejsPrefix+"account_statistical");
+});
+
 module.exports = router;

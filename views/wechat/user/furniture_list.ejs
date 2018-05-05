@@ -159,17 +159,17 @@
 
 <script type="text/html" id="furnitureListTemplate">
     {{each list as furniture}}
-    <div class="weui-media-box weui-media-box_appmsg" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">
+    <div class="weui-media-box weui-media-box_appmsg" >
         <div class="weui-media-box__hd">
-            <img class="weui-media-box__thumb" src="{{furniture.headImg}}">
+            <img class="weui-media-box__thumb" src="{{furniture.headImg}}" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">
         </div>
         <div class="weui-media-box__bd">
-            <h4 class="weui-media-box__title">{{furniture.title}}</h4>
+            <h4 class="weui-media-box__title" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">{{furniture.title}}</h4>
             <div class="wechat-content-option" style="">
                 <div class="wechat-content-price">¥{{furniture.price}}</div>
                 <div class="wechat-content-btnGroup">
-                    <button class="bd-txt-color"><i class="fa fa-phone"></i> 联系</button>
-                    <button class="bd-txt-color"><i class="fa fa-archive"></i> 店铺</button>
+                    <a href="tel:{{furniture.phone}}"><button class="bd-txt-color"><i class="fa fa-phone"></i> 立即联系</button></a>
+                    <!--<button class="bd-txt-color"><i class="fa fa-archive"></i> 店铺</button>-->
                 </div>
             </div>
             <div class="wechat-content-address" style=""><i class="fa fa-map-marker"></i>{{furniture.merchantName}}</div>
