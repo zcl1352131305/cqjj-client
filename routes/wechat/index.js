@@ -41,5 +41,17 @@ router.get('/smsCode', function (req, res, next) {
     });
 });
 
+router.get('/checkCode', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/sysAdmin/sms/checkCode",
+            qs:req.query,
+            method: 'GET'
+        });
+    }).then(function (data) {
+        logger.error("----"+JSON.stringify(data));
+        res.json(data);
+    });
+});
 
 module.exports = router;

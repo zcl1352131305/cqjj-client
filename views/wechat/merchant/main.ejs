@@ -82,6 +82,16 @@
         .weui-grid__icon+.weui-grid__label{
             font-size: 13px;
         }
+        .validateCode-header{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            text-indent: 16px;
+            color: #666;
+            background: #fff;
+        }
     </style>
 
 
@@ -118,7 +128,7 @@
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-recycle.png" alt="">
                     </div>
-                    <p class="weui-grid__label">回收家具</p>
+                    <p class="weui-grid__label">收购家具</p>
                 </a>
                 <a id="myPublish" href="javascript:void(0);" class="weui-grid">
                     <div class="weui-grid__icon">
@@ -175,7 +185,7 @@
                 <div>商户管理</div>
             </div>
             <div class="weui-grids">
-                <a id="merchantInfoUpd" href="javascript:;" class="weui-grid">
+                <a id="merchantInfoUpd" href="javascript:void(0);" class="weui-grid">
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-change.png" alt="">
                     </div>
@@ -243,6 +253,41 @@
     </div>
 </div>
 
+<div id="validateCodePopup" class="weui-popup__container popup-bottom">
+    <input type="hidden" id="smsToPage" >
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal" style="background: #fff">
+        <div class="validateCode-header">
+            请进行短信验证
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input id="phone" class="weui-input" readonly type="tel" placeholder="请输入手机号">
+                </div>
+                <div class="weui-cell__ft">
+                    <button id="sendSMS" class="weui-vcode-btn textbtncolor">获取验证码</button>
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                    <input id="validateCode" class="weui-input" type="text" placeholder="输入验证码" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="weui-btn-area">
+            <a class="weui-btn btncolor" href="javascript:" id="submitCheck">确认</a>
+        </div>
+    </div>
+</div>
+
 </body>
 <%- include('../public/public_js') %>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
@@ -251,8 +296,12 @@
 <script>
 
 
-    var accessToken, adminUserId;
+    var accessToken, adminUserId,wechatUserId;
     $(document).ready(function () {
+        $("#submitCheck").on("click",function(){
+            semdSms();
+        });
+
         checkIsCertification();
     });
 
@@ -260,9 +309,12 @@
     function checkIsCertification(){
         var wechatUserInfo = getGlobalAttribute("wechatUserInfo");
         adminUserId = wechatUserInfo.merchantAdminId;
+        wechatUserId = wechatUserInfo.id;
         $("#headImg").attr("src",wechatUserInfo.headImgUrl);
         $("#nickname").html(wechatUserInfo.nickName);
-        $("#bindingUser").html("当前绑定账号："+wechatUserInfo.adminUsername)
+        $("#bindingUser").html("当前绑定账号："+wechatUserInfo.adminUsername);
+
+        $("#phone").val(wechatUserInfo.adminUsername);
         merchantBaseAjax({
             url:"/wechat/merchant/certification/checkIsCertification",
             type:"get",
@@ -271,7 +323,10 @@
             },
             success:function(data){
                 onLoginHandle();
-                $("#merchantInfoUpd").attr("href",'/wechat/merchant/certification/edit?adminId='+wechatUserInfo.merchantAdminId)
+                //$("#merchantInfoUpd").attr("href",'/wechat/merchant/certification/edit?adminId='+wechatUserInfo.merchantAdminId)
+               //$("#merchantInfoUpd").attr("href",'/wechat/index/toSmsCheck?page=merchantInfoUpd')
+
+
                 if(null == data.result || JSON.stringify(data.result) == '{}'){
                     $.alert("当前商户信息未认证，请前往认证页面进行认证！",'认证提示');
                 }
@@ -317,8 +372,17 @@
 
 
         $("#changePhone").on('click',function(){
-            location.href = '/wechat/merchant/home/toChangePhone?wechatUserId='+wechatUserInfo.id;
+            //location.href = '/wechat/merchant/home/toChangePhone?wechatUserId='+wechatUserInfo.id;
+            $("#smsToPage").val("changePhone");
+            $("#validateCode").val("");
+            $("#validateCodePopup").popup();
         })
+
+        $("#merchantInfoUpd").on("click",function () {
+            $("#smsToPage").val("merchantInfoUpd");
+            $("#validateCode").val("");
+            $("#validateCodePopup").popup();
+        });
 
     }
 
@@ -376,25 +440,84 @@
         })
     }
 
-    function onAuthHandle(){
 
+    function semdSms(){
+        if(smsCheck()){
+            noAuthBaseAjax({
+                url:"/wechat/index/checkCode",
+                type:"get",
+                data:{
+                    username:$("#phone").val(),
+                    validateCode:$("#validateCode").val(),
+                },
+                success:function(){
+                    var page = $("#smsToPage").val();
+                    if(page == 'merchantInfoUpd'){
+                        location.href = '/wechat/merchant/certification/edit?adminId='+adminUserId
+                    }
+                    else if(page == "changePhone"){
+                        location.href = '/wechat/merchant/home/toChangePhone';
+                    }
+                },
+                error:function(e){
+                    alert("操作失败!"+JSON.stringify(e));
+                }
+            });
+        }
     }
 
+    function smsCheck(){
 
-
-
-
-
-
-    function check(){
-        var password = $("#password").val();
-        if(null == password || password == '' || password.length != 6){
-            $.toptip("请输入6位密码！", 'error');
+        var phone = $("#phone").val();
+        var validateCode = $("#validateCode").val();
+        if(null == phone || phone == '' || phone.length != 11){
+            $.toptip("请输入正确的手机号！", 'error');
+            return false;
+        }
+        if(null == validateCode || validateCode == ''){
+            $.toptip("验证码不能为空！", 'error');
             return false;
         }
 
         return true;
     }
+
+
+    $("#sendSMS").on("click",function(){
+        var phone = $("#phone").val();
+        if(null == phone || phone == '' || phone.length != 11){
+            $.toptip("请输入正确的手机号！", 'error');
+            return false;
+        }
+
+        var index = 60;
+        $("#sendSMS").attr("disabled","disabled");
+        $("#sendSMS").html(index+"秒后重发");
+        var i = setInterval(function () {
+            index --;
+            if(index > 0){
+                $("#sendSMS").attr("disabled","disabled");
+                $("#sendSMS").html(index+"秒后重发");
+            }
+            else{
+                $("#sendSMS").removeAttr("disabled");
+                $("#sendSMS").html("重新发送");
+                clearInterval(i)
+            }
+        },1000)
+
+        merchantBaseAjax({
+            url:"/wechat/index/smsCode",
+            data:{
+                phone:phone
+            },
+            type:"get",
+            success:function(data){
+                alert(data.result)
+            },
+        })
+
+    })
 
 </script>
 </html>

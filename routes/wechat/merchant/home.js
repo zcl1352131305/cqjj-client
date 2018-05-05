@@ -178,8 +178,7 @@ router.get('/toChangePhone', function (req, res, next) {
     }).then(function (data) {
         logger.error('+++++'+JSON.stringify(data))
         res.render(ejsPrefix+"change_phone",{
-            id: data.result.id,
-            wechatUserId: req.query.wechatUserId
+            id: data.result.id
         })
     });
 });

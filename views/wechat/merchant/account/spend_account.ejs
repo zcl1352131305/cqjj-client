@@ -36,6 +36,12 @@
         <div class="weui-cells__title">支出明细</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">支出类型</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="spendType" type="text" placeholder="请选择支出类型"  value="<%=transaction.spendType%>" />
+                </div>
+            </div>
+            <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <textarea id="tradingDetail" class="weui-textarea" rows="3" placeholder="请填写支出明细，具体支出事由"><%=transaction.tradingDetail%></textarea>
                 </div>
@@ -44,6 +50,7 @@
 
         <div class="weui-cells__title">支出信息</div>
         <div class="weui-cells weui-cells_form">
+
 
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">支出总价</label></div>
@@ -91,6 +98,7 @@
 
     $(document).ready(function () {
         payTypeSelectInit();
+        spendTypeSelectInit();
         $("#tradingTime").calendar({
             dateFormat: 'yyyy-mm-dd'
         });
@@ -154,7 +162,12 @@
     }
 
 
-
+    function spendTypeSelectInit(){
+        $("#spendType").select({
+            title: "支出类型",
+            items: ['家具收购','搬运支出','其它']
+        });
+    }
 
     function payTypeSelectInit(){
         var payTypeInit = '<%=transaction.payType%>';
