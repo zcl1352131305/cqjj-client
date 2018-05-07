@@ -74,7 +74,10 @@
                     <input id="isNew" class="weui-switch" type="checkbox" <%=sale.isNew == '1'?'checked':''%>>
                 </div>
             </div>
+        </div>
 
+        <div class="weui-cells__title">家具介绍</div>
+        <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <textarea id="description" name="detailInfo" class="weui-textarea" placeholder="请输入简要介绍" rows="3"><%=sale.detailInfo%></textarea>
@@ -108,6 +111,8 @@
                 </div>
             </div>
         </div>
+
+
 
         <div class="weui-cells__title">关键字（用户搜索时的关键字，最多三个）</div>
         <div class="weui-cells weui-cells_form">

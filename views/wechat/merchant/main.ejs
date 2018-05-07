@@ -37,7 +37,7 @@
         .merchant_title p.account{
             font-size: 12px;
             color: #999;
-            margin-bottom: 20px;
+
         }
 
         .weui-grids{
@@ -92,6 +92,11 @@
             color: #666;
             background: #fff;
         }
+        .auditState{
+            font-size: 12px;
+            margin-bottom: 20px;
+            color: #FF7F00;
+        }
     </style>
 
 
@@ -110,13 +115,14 @@
                 <!--<img id="headImg" src="" />-->
                 <p id="nickname" class="name"></p>
                 <p id="bindingUser" class="account"></p>
+                <p id="auditState" class="auditState"></p>
             </div>
             <div class="grey-area"></div>
             <div class="grids-title">
                 <img src="/static/images/icon/icon-sofa.png" />
                 <div>家具收售</div>
             </div>
-            <div class="weui-grids">
+            <div class="weui-grids" id="furnitureSaleRecycleBtns">
                 <a id="salePublish" href="javascript:void(0);" class="weui-grid">
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-publish.png" alt="">
@@ -143,7 +149,7 @@
                 <img src="/static/images/icon/icon-sofa.png" />
                 <div>收售记账</div>
             </div>
-            <div class="weui-grids">
+            <div class="weui-grids" id="accountBtns">
                 <a id="saleAccount" href="javascript:void(0);" class="weui-grid">
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-publish.png" alt="">
@@ -212,18 +218,18 @@
                 <div>更多功能</div>
             </div>
             <div class="weui-grids">
-                <a href="javascript:;" class="weui-grid">
+                <a id="advice" href="javascript:void(0);" class="weui-grid">
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-talk.png" alt="">
                     </div>
                     <p class="weui-grid__label">我要吐槽</p>
                 </a>
-                <a href="javascript:;" class="weui-grid">
+                <!--<a href="javascript:;" class="weui-grid">
                     <div class="weui-grid__icon">
                         <img src="/static/images/icon/icon-more_dot.png" alt="">
                     </div>
                     <p class="weui-grid__label">敬请期待...</p>
-                </a>
+                </a>-->
 
             </div>
 
@@ -328,12 +334,38 @@
 
 
                 if(null == data.result || JSON.stringify(data.result) == '{}'){
-                    $.alert("当前商户信息未认证，请前往认证页面进行认证！",'认证提示');
+                    $.confirm({
+                        title: '认证提示',
+                        text: '当前商户信息未认证，是否前往认证页面进行认证？',
+                        onOK: function () {
+                            location.href = '/wechat/merchant/certification/edit?adminId='+adminUserId
+                        },
+                        onCancel: function () {
+                        }
+                    });
+                    $("#auditState").html("当前未认证，部分功能无法使用!");
+                    $("#auditState").css("color","#FF7F00");
                 }
                 else{
                     //认证成功才能作的操作
                     if(data.result.auditState == '3' || data.result.auditState == 3){
                         authSuccessHandle()
+                    }
+                    else{
+                        $("#furnitureSaleRecycleBtns a").on("click",function(){
+                            $.alert("当前认证暂未通过，该功能无法使用！",'认证提示');
+                        });
+                        $("#accountBtns a").on("click",function(){
+                            $.alert("当前认证暂未通过，该功能无法使用！",'认证提示');
+                        });
+                        if(data.result.auditState == '1' || data.result.auditState == 1){
+                            $("#auditState").html("认证审核中，部分功能无法使用!");
+                            $("#auditState").css("color","#FF7F00");
+                        }
+                        else if(data.result.auditState == '2' || data.result.auditState == 2){
+                            $("#auditState").html("认证审核失败，请重新填写认证信息并提交审核!");
+                            $("#auditState").css("color","#FF4040");
+                        }
                     }
                 }
             },
@@ -383,6 +415,10 @@
             $("#validateCode").val("");
             $("#validateCodePopup").popup();
         });
+
+        $("#advice").on("click",function(){
+            location.href = '/wechat/index/toAdvice';
+        })
 
     }
 

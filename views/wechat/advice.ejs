@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <title></title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
+    <style type="text/css">
+        .weui-uploader__files img {
+            width: 100%;
+            height: 100%
+        }
+        .weui-uploader__files li{
+            border: 1px solid #ddd;
+        }
+        .weui-cells__title{
+            font-size: 14px;
+        }
+        .weui-cell{
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+
+<body>
+<header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
+    <h1>我要吐槽</h1>
+</header>
+
+<div class="wechat-content">
+    <form id="form" method="post">
+
+        <div class="weui-cells__title">我要吐槽</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea id="advice"  class="weui-textarea" rows="3" placeholder="请输入对产品的意见、建议或者任何的疑问，限500字内"></textarea>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系方式</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="contactWay" type="text" placeholder="（选填）"  />
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-btn-area">
+            <a class="weui-btn btncolor" href="javascript:" id="submitBtn">提交</a>
+        </div>
+
+
+
+    </form>
+
+</div>
+
+
+
+</body>
+<%- include('public/public_js') %>
+<script>
+
+
+    $(document).ready(function () {
+        $("#submitBtn").on("click",function(){
+            if(check()){
+                merchantBaseAjax({
+                    url:"/wechat/index/submitAdvice",
+                    type:"post",
+                    data:{
+                        advice: $("#advice").val(),
+                        contactWay:$("#contactWay").val()
+
+                    },
+                    success:function(data){
+                        $.alert("您的建议提交成功，我们会认真采纳，谢谢！",'提交成功',function () {
+                            history.go(-1);
+                        });
+
+                    },
+                })
+            }
+        });
+    });
+
+
+    function check(){
+        var advice = $("#advice").val();
+        var contactWay = $("#contactWay").val();
+
+        if(complexCheck(advice, "意见建议",500)) return false;
+        if(maxLengthCheck(contactWay,50,"联系方式过长！")) return false;
+
+
+        return true;
+    }
+
+
+
+
+
+</script>
+</html>

@@ -58,6 +58,9 @@ router.get('/edit', function (req, res, next) {
                 if(null == data.result.fnImgs){
                     data.result.fnImgs = []
                 }
+                if(null != data.result.detailInfo){
+                    data.result.detailInfo = common.textareaUnFormat(data.result.detailInfo);
+                }
                 returnObj.recycle = data.result
                 res.render(ejsPrefix+"recycle_publish",returnObj);
             });
@@ -99,6 +102,7 @@ router.post('/saveOrUpdate', function (req, res, next) {
         }
     }
     req.body.fnImgs = fnImgs;
+    req.body.detailInfo = common.textareaFormat(req.body.detailInfo);
 
     console.log(JSON.stringify(req.body))
 

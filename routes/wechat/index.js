@@ -54,4 +54,34 @@ router.get('/checkCode', function (req, res, next) {
     });
 });
 
+router.get('/markets', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/market/all",
+            method: 'GET'
+        });
+    }).then(function (data) {
+        logger.error("----"+JSON.stringify(data));
+        res.json(data);
+    });
+});
+
+
+router.get('/toAdvice', function (req, res, next) {
+    res.render(ejsPrefix+"advice");
+});
+
+router.post('/submitAdvice', function (req, res, next) {
+    return Promise.try(function () {
+        return cRequest.sendRequest(req, res, {
+            url: constant.BASE_PATH + "/cqjjTrade/advice/add",
+            body: req.body,
+            method: 'POST',
+            json:true
+        });
+    }).then(function (data) {
+        logger.error("----"+JSON.stringify(data));
+        res.json(data);
+    });
+});
 module.exports = router;

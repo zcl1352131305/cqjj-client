@@ -98,7 +98,15 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" id="phone" type="text" value="<%=merchantInfo.phone%>" placeholder="请输入联系电话" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                    <input class="weui-input" id="phone" type="number" value="<%=merchantInfo.phone%>" placeholder="请输入联系电话" <%=(merchantInfo.auditState == 1 || merchantInfo.auditState == '1')?'readonly':''%> />
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">所属市场</label></div>
+                <div class="weui-cell__bd">
+                    <input type="hidden" id="marketId" value="<%=merchantInfo.marketId%>" >
+                    <input class="weui-input" id="marketName" readonly placeholder="请选择所属市场" />
                 </div>
             </div>
 
@@ -113,7 +121,7 @@
                 <div class="weui-cell__hd"><label class="weui-label">经营范围</label></div>
                 <div class="weui-cell__bd">
                     <input type="hidden" id="businessScope" value="<%=merchantInfo.typeIds%>" >
-                    <input class="weui-input" id="businessScopeNames" value="<%=merchantInfo.typeNames%>" readonly  />
+                    <input class="weui-input" id="businessScopeNames" value="<%=merchantInfo.typeNames%>" readonly placeholder="请选择经营范围" />
                 </div>
             </div>
 
@@ -188,6 +196,7 @@
     var accessToken;
     $(document).ready(function () {
         initFnType();
+        initMarkets();
         initWechatConfig("<%=basePath%>","<%-wxconfigUrl%>",function(token){
             accessToken = token;
         })
@@ -278,7 +287,8 @@
                         email:$("#email").val(),
                         businessScopeIds: $("#businessScope").val(),
                         address:$("#address").val(),
-                        auditState:"1"
+                        auditState:"1",
+                        marketId:$("#marketId").val()
 
                     },
                     success:function(data){
@@ -374,6 +384,51 @@
                     min: 1,
                     onChange: function(event) {
                         $("#businessScope").val(event.values);
+                    }
+                });
+            },
+            error:function(e){
+                alert("操作失败!"+JSON.stringify(e));
+            }
+        });
+
+
+    }
+
+    var addresses = [];
+    function initMarkets(){
+        addresses = [];
+        noAuthBaseAjax({
+            url:"/wechat/index/markets",
+            type:"get",
+            success:function(data){
+                var marketId = '<%=merchantInfo.marketId%>';
+                var markets = [];
+                data.result.forEach(function(market){
+                    if(market.id == marketId){
+                        $("#marketName").val(market.name);
+                    }
+                    markets.push({
+                        title:market.name,
+                        value:market.id
+                    });
+                    addresses.push({
+                        id:market.id,
+                        address:market.address
+                    })
+                });
+                $("#marketName").select({
+                    title: "请选择家具市场",
+                    items: markets,
+                    autoClose:true,
+                    onChange: function() {
+                        var marketId = $("#marketName").data("values")
+                        $("#marketId").val(marketId);
+                        addresses.forEach(function (value) {
+                            if(value.id == marketId){
+                                $("#address").val(value.address);
+                            }
+                        })
                     }
                 });
             },
