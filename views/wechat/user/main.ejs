@@ -52,6 +52,9 @@
         .weui-grid:after, .weui-grid:before{
             content: none;
         }
+        .weui-grid{
+            background: #fff;
+        }
         .weui-grids:after{
             border: none;
         }
@@ -59,10 +62,9 @@
             width: 25%;
         }
         .grui-1 div{
-            width: 30px;
-            height: 30px;
-            border-radius: 100%;
-            padding: 10px;
+            width: 50px;
+            height: 50px;
+            background: none;
         }
         .fn-type-1{
             width: 30%;
@@ -92,14 +94,15 @@
         }
 
         .grids-title{
-            color: #666;
+            color: #333;
+            margin-top: 10px;
             background: #fff;
             height: 40px;
             font-size: 14px;
             padding-left: 10px;
             font-weight: bold;
             line-height: 40px;
-            border-bottom: 1px solid #f8f8f8;
+            border-bottom: 1px solid #eee;
         }
         .grids-title img{
             margin-top: 10px;
@@ -107,11 +110,15 @@
             float: left;
         }
         .grids-title div{
-            margin-left: 10px;
+            margin-left: 6px;
             float: left;
         }
         .grui-2 div{
-            width: 33px;
+            width: 40px;
+            height: 40px;
+        }
+        .weui-grid__label{
+            color: #333;
         }
     </style>
 
@@ -201,7 +208,7 @@
         </div>
 
         <div class="grids-title">
-            <img src="/static/images/icon/icon-more.png" />
+            <div style="height: 16px;margin-top: 12px;background: #1AB394;width: 5px;"></div>
             <div>家具分类</div>
         </div>
         <div class="weui-grids">
@@ -277,7 +284,7 @@
             }
         }
         init();
-        getSwiperInfo();
+        //getSwiperInfo();
     });
 
     function init(){

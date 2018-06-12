@@ -4,6 +4,7 @@
 .weui-panel__bd .weui-media-box__title{
 	color: #555;
 	font-size: 14px !important;
+	padding-top: 2px;
 }
 
 .weui-media-box_appmsg .weui-media-box__hd{
@@ -26,7 +27,7 @@
 
 
 .weui-media-box__title {
-	height: 34px;
+	height: 36px;
 	white-space: normal;
 	line-height: 17px;
 	display: -webkit-box;
@@ -75,4 +76,9 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+.title-label{
+	font-size: 12px;
+	padding: 2px;
+	margin-left: 5px;
 }

@@ -21,6 +21,14 @@
         .weui-uploader__files li.title{
             border: 1px solid #1AAD19;
         }
+        .weui-uploader__input-box{
+            width: 100px;
+            height: 75px;
+        }
+        .weui-uploader__file{
+            width: 102px;
+            height: 76.5px;
+        }
     </style>
 </head>
 
@@ -94,7 +102,7 @@
                                 <%}) %>
                             </ul>
                             <div class="weui-uploader__input-box">
-                                <div id="addImg" class="weui-uploader__input"></div>
+                                <div id="addImg" class="weui-uploader__input" style="width: 100%;height: 100%"></div>
                             </div>
                         </div>
                     </div>
@@ -237,7 +245,7 @@
                         str += '<li class="weui-uploader__file" data-imgPath="'+imgPath+'">'
                     }
 
-                    str += '<img src="'+imgPath+'" />';
+                    str += '<img src="'+imgPath+'" style="width:" />';
                     str += '<input type="hidden" name="furnitureImg" value="'+imgPath+'">';
                     str += '</li>';
                     $("#uploaderFiles").append(str);

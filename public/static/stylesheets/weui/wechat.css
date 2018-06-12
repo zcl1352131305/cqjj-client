@@ -2,6 +2,7 @@ body{
 	height:100%;
 	overflow:hidden;
 	font-family: "黑体";
+	background: #fff;
 }
 .wechat-header{
 	text-align: center;
@@ -12,7 +13,7 @@ body{
     right: 0;
     left: 0;
     z-index: 10;
-    background: #fff;
+    background: #F2F2F2;
 }
 .wechat-header h1{
 	color: #444;

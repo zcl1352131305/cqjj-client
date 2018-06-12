@@ -46,7 +46,6 @@
             float: right;
             width: auto;
             height: 34px;
-            border-radius: 5px;
             background: #fff;
             padding-left: 5px;
             padding-right: 5px;
@@ -100,15 +99,21 @@
                 <img class="weui-media-box__thumb" src="{{sale.headImg}}">
             </div>
             <div class="weui-media-box__bd">
-                <h4 class="weui-media-box__title">{{sale.title}}</h4>
+                <h4 class="weui-media-box__title">{{sale.title}}
+                    {{if sale.isShow == 1}}
+                    <span  id="showFlag_{{sale.id}}" class="title-label" style="border: 1px solid #FFB830;color:#FFAB33; background: #FFF8E5;">显示中</span>
+                    {{else}}
+                    <span  id="showFlag_{{sale.id}}" class="title-label" style="border: 1px solid #FF6266;color:#FF6266; background: #FFE8E9;">未显示</span>
+                    {{/if}}
+                </h4>
                 <div class="wechat-content-option" style="">
-                    <div class="wechat-content-state" id="showFlag_{{sale.id}}">
+                    <!--<div class="wechat-content-state" id="showFlag_{{sale.id}}">
                         {{if sale.isShow == 1}}
                         <span class="textcolor">显示中</span>
                         {{else}}
                         <span style="color: #ca4440;">未显示</span>
                         {{/if}}
-                    </div>
+                    </div>-->
                 </div>
                 <p class="wechat-content-address" style="float: right;">修改于{{sale.dateUpdated}}</p>
             </div>
@@ -230,12 +235,14 @@
                 if(isShow == '1' || isShow == 1){
                     $(btn).html("隐藏");
                     $(btn).attr("onclick","updState('"+id+"','0',this)")
-                    $("#showFlag_"+id).html('<span class="textcolor">显示中</span>');
+                    $("#showFlag_"+id).html('显示中');
+                    $("#showFlag_"+id).attr('style','border: 1px solid #FFB830;color:#FFAB33; background: #FFF8E5;');
                 }
                 else{
                     $(btn).html("显示");
                     $(btn).attr("onclick","updState('"+id+"','1',this)")
-                    $("#showFlag_"+id).html('<span style="color: #ca4440;">未显示</span>');
+                    $("#showFlag_"+id).html('未显示');
+                    $("#showFlag_"+id).attr('style','border: 1px solid #FF6266;color:#FF6266; background: #FFE8E9;');
                 }
             },
         })

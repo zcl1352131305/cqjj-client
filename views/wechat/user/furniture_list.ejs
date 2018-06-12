@@ -68,6 +68,9 @@
             border-radius: 5px;
         }
 
+        .weui-panel{
+        }
+
     </style>
 </head>
 
@@ -164,7 +167,10 @@
             <img class="weui-media-box__thumb" src="{{furniture.headImg}}" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">
         </div>
         <div class="weui-media-box__bd">
-            <h4 class="weui-media-box__title" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">{{furniture.title}}</h4>
+            <h4 class="weui-media-box__title" onclick="location.href='/wechat/user/furniture/detail?id={{furniture.id}}'">{{furniture.title}}
+                <span class="title-label" style="border: 1px solid #FFB830;color:#FFAB33; background: #FFF8E5;">{{furniture.isNew == '1'?'全新':'二手'}}</span>
+                <span class="title-label" style="border: 1px solid #FF6266;color:#FF6266; background: #FFE8E9;">{{furniture.typeName}}</span>
+            </h4>
             <div class="wechat-content-option" style="">
                 <div class="wechat-content-price">¥{{furniture.price}}</div>
                 <div class="wechat-content-btnGroup">
@@ -173,7 +179,7 @@
                 </div>
             </div>
             <div class="wechat-content-address" style=""><i class="fa fa-map-marker"></i>{{furniture.merchantName}}</div>
-            <div class="wechat-content-type textcolor" style="">{{furniture.isNew == '1'?'全新家具':'二手家具'}}</div>
+            <!--<div class="wechat-content-type textcolor" style="">{{furniture.isNew == '1'?'全新家具':'二手家具'}}</div>-->
         </div>
     </div>
     {{/each}}
@@ -232,6 +238,7 @@
 
 
     function loadData(handle){
+        let fnTypes = JSON.parse('<%-JSON.stringify(fnTypes)%>');
         noAuthBaseAjax({
             url:"/wechat/user/furniture/frontPage",
             type:"get",
@@ -242,6 +249,13 @@
                 searchIsNew:$("#searchIsNew").val()
             },
             success:function(data){
+                data.result.list.forEach(furniture=>{
+                    fnTypes.forEach(fnType=>{
+                        if(fnType.id == furniture.typeId){
+                            furniture.typeName = fnType.name.replace("家具",'');
+                        }
+                    })
+                });
                 var html = template("furnitureListTemplate",data.result)
                 handle(html,data.result.pages);
                 if(page < data.result.pages){
