@@ -411,10 +411,14 @@
         })
 
         $("#merchantInfoUpd").on("click",function () {
+            location.href = '/wechat/merchant/certification/edit?adminId='+adminUserId
+        });
+
+        /*$("#merchantInfoUpd").on("click",function () {
             $("#smsToPage").val("merchantInfoUpd");
             $("#validateCode").val("");
             $("#validateCodePopup").popup();
-        });
+        });*/
 
         $("#advice").on("click",function(){
             location.href = '/wechat/index/toAdvice';
@@ -552,7 +556,7 @@
             },
             type:"get",
             success:function(data){
-                alert(data.result)
+                //alert(data.result)
             },
         })
 

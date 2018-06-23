@@ -28,6 +28,7 @@ var logger = require("./lib/common").logger('normal');
 var app = express()
 
 
+var index = require('./routes/index');
 //微信用户端
 var wechatIndex = require('./routes/wechat/index');
 var qiniu = require('./routes/qiniu');
@@ -58,6 +59,7 @@ app.use(express.static( path.join(__dirname, 'public')));
 
 
 //微信服务号
+app.use("/index", index);
 app.use("/wechat/index", wechatIndex);
 app.use("/wechat/user/recycle", userRecycle);
 app.use("/wechat/user/home", userHome);

@@ -2,6 +2,7 @@
 <script type="text/javascript" src="/static/javascripts/jquery-2.1.0.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
 <script type="text/javascript" src="/static/javascripts/weui/wechat-base.js"></script>
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
 <!--<script type="text/javascript" src="/static/javascripts/weui/example.js"></script>-->
 <script type="text/javascript">
 
@@ -64,6 +65,72 @@
             }
         });
     }
+
+
+    var app = angular.module("merchantBase",[]);
+    app.factory('merchantService',($http,$location)=>{
+
+       let factory =  {};
+        factory.merchantHttp=param=>{
+            let type = '',http;
+            param.data.reqUrl = param.url
+            if(param.type.toUpperCase() == 'GET' || param.type.toUpperCase() == 'DELETE'){
+                type = 'GET';
+                http = $http({
+                    url:'/index/do'+param.type.toUpperCase(),
+                    method:type,
+                    params:param.data
+                })
+            }
+            else{
+                type = 'POST';
+                http = $http({
+                    url:'/index/do'+param.type.toUpperCase(),
+                    method:type,
+                    data:param.data
+                })
+            }
+
+
+
+            http.then(resp=>{
+                let data = resp.data;
+                if(data.code == 401 || data.code == '401'){
+                    $.toptip("登陆信息失效！", 'error');
+                    setTimeout(function(){
+                        $location.href = '/wechat/merchant/home/init';
+                    },2000)
+                }
+                else if(data.code == 402 || data.code == '402'){
+                    $.toptip("登陆信息失效！", 'error');
+                    setTimeout(function(){
+                        $location.href = '/wechat/merchant/home/init';
+                    },2000)
+                }
+                else if(data.code == 403 || data.code == '403'){
+                    $.toptip("未被授权访问此页！", 'error');
+                    setTimeout(function(){
+                        $location.href = '/wechat/merchant/home/main';
+                    },2000)
+                }
+                else if(data.code == 1 || data.code == '1'){
+                    $.toptip(data.message, 'error');
+                }
+                else{
+                    param.success(data);
+                }
+            },resp=>{
+                $.toptip("操作失败！", 'error');
+            });
+        };
+        factory.getDateMonth=date=>{
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            if(month < 10) month = '0'+month;
+            return year + '-' + month;
+        }
+        return factory;
+    })
 
     function noAuthBaseAjax(param){
         $.ajax({

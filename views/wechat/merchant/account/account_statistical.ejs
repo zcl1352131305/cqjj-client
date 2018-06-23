@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="/static/stylesheets/weui/wechat.css">
     <style type="text/css">
         .wechat-search_month{
-            color: #444;
+            color: #3DC1A6;
             height: 40px;
             line-height: 40px;
-            border-bottom: 3px solid #444;
+            border-bottom: 1px dashed #aaa;
             margin-left: 15px;
             margin-right: 15px;
 
@@ -26,11 +26,11 @@
             text-align: center;
             font-size: 16px;
             font-weight: bold;
+            color: #3DC1A6;
         }
         .wechat-statistical{
             height: 100px;
             margin-top: 3px;
-            border-top: 1px solid #444;
             margin-left: 15px;
             margin-right: 15px;
         }
@@ -79,12 +79,16 @@
         .pie-type span.bgcolor{
             color: #fff !important;
         }
+        .money{
+            color: #FFA820;
+        }
     </style>
 </head>
 
 
-<body>
+<body ng-controller="controller">
 <header class="wechat-header">
+    <a class="icon-back"><i class="fa fa-chevron-left"></i></a>
     <h1>统计报表</h1>
 </header>
 
@@ -94,16 +98,16 @@
             <div class="wechat-search_month"><input type="text" readonly value="2018年5月"></div>
             <div class="wechat-statistical">
                 <div class="statistical-title">
-                    <h3>本月利润<span class="money">1520.00</span></h3>
+                    <h3>本月利润<span class="money">{{pageData.profits}}</span></h3>
                 </div>
                 <div class="statistical-content">
                     <div id="profitsCharts" ></div>
                 </div>
 
                 <div class="statistical-title">
-                    <h3>销售额<span class="money">15200.00</span></h3>
+                    <h3>销售额<span class="money">{{pageData.sales}}</span></h3>
                 </div>
-                <div class="statistical-content">
+               <div class="statistical-content">
                     <div id="salesCharts" ></div>
                     <div class="pie-type">
                         <span class="bd-txt-color bgcolor">按是否收款</span>
@@ -112,7 +116,7 @@
                 </div>
 
                 <div class="statistical-title">
-                    <h3>支出费用<span class="money">15200.00</span></h3>
+                    <h3>支出费用<span class="money">{{pageData.spends}}</span></h3>
                 </div>
                 <div class="statistical-content">
                     <div id="spendsCharts" ></div>
@@ -133,139 +137,193 @@
 <script type="text/javascript" src="/static/javascripts/echarts.simple.min.js"></script>
 <script type="text/javascript" src="/static/javascripts/macarons.js"></script>
 <script>
-    var profitsChart,salesChart,spendsChart;
-    $(function() {
-        $('.weui-tabbar__item').on('click', function() {
-            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
-        });
 
-        profitsChart = echarts.init(document.getElementById('profitsCharts'),'macarons');
-        salesChart = echarts.init(document.getElementById('salesCharts'),'macarons');
-        spendsChart = echarts.init(document.getElementById('spendsCharts'),'macarons');
+    angular.module('app',['merchantBase']).controller('controller',($scope,$http,$window,merchantService)=>{
+        $scope.adminUserInfo = $window.getGlobalAttribute("wechatUserInfo");
+        const echartsConst = {
+            profitsChart:echarts.init(document.getElementById('profitsCharts'),'macarons'),
+            salesChart : echarts.init(document.getElementById('salesCharts'),'macarons'),
+            spendsChart : echarts.init(document.getElementById('spendsCharts'),'macarons'),
+            initProfitsChart:()=>{
+                let option = {
+                    xAxis: {
+                        scale: true,
+                        splitLine:{
+                            show:false
+                        },
+                        type: 'category',
+                        data: ['一月', '二月', '三月', '四月', '五月']
+                    },
+                    yAxis: {
+                        show : false,
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [620, 932, 901, 934, 1290],
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        type: 'line',
+                        smooth: false
+                    }]
+                };
+                echartsConst.profitsChart.setOption(option);
+            },
+            initSales:()=>{
 
-        initProfitsChart();
-        initSales();
-        initSpendss();
+                let option = {
+                    title : {
+                        text: '销售额统计',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data: ['已收款','未收款']
+
+                    },
+                    series : [{
+                        radius : '50%',
+                        label: {
+                            normal: {
+                                formatter: '{b}:{d}% ',
+                            }
+                        },
+                        name: '姓名',
+                        type: 'pie',
+                        data: [{
+                            name:'已收款',
+                            value:'100'
+                        },{
+                            name:'未收款',
+                            value:'200'
+                        }]
+
+                    }]
+                };
+
+                echartsConst.salesChart.setOption(option);
+            },
+            initSpends:()=>{
+
+                let option = {
+                    title : {
+                        text: '支出统计',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        vertical: 'vertical',
+                        left: 'left',
+                        data: ['家具收购','搬运费', '其它']
+
+                    },
+                    series : [{
+                        radius : '50%',
+                        name: '类型',
+                        label: {
+                            normal: {
+                                formatter: '{b}:{d}% ',
+                            }
+                        },
+                        type: 'pie',
+                        data: [{
+                            name:'家具收购',
+                            value:'100'
+                        },{
+                            name:'搬运费',
+                            value:'200'
+                        },{
+                            name:'其它',
+                            value:'200'
+                        }]
+
+                    }]
+                };
+
+                echartsConst.spendsChart.setOption(option);
+            }
+        }
+
+        echartsConst.initProfitsChart();
+        echartsConst.initSales();
+        echartsConst.initSpends();
+
+        $scope.pageData={
+            profits:0,
+            sales:0,
+            spends:0
+        }
+
+        $scope.monthCount = {
+            month:merchantService.getDateMonth(new Date()),
+            monthSales:[],
+            monthSpends:[],
+            initData:()=>{
+                $scope.monthCount.getMonthSales().then(()=>{
+                    return $scope.monthCount.getMonthSpends();
+                }).then(()=>{
+                    let saleSum = $scope.monthCount.monthSales.map(sale=>sale.totalPrice).reduce((pre,cur)=>parseFloat(pre) + parseFloat(cur));
+                    let spendSum = $scope.monthCount.monthSpends.map(spend=>spend.totalPrice).reduce((pre,cur)=>parseFloat(pre) + parseFloat(cur));
+                    let profits = (parseFloat(saleSum) - parseFloat(spendSum));
+                    $scope.pageData = {
+                        profits,
+                        sales:saleSum,
+                        spends:spendSum
+                    }
+
+
+                    $scope.$apply()
+                })
+            },
+            getMonthSales:()=>{
+                return new Promise((resolve,reject)=>{
+                    merchantService.merchantHttp({
+                        url:'/cqjjTrade/account/sale/monthSaleAccounts',
+                        type:'GET',
+                        data:{
+                            month: $scope.monthCount.month,
+                            adminId: $scope.adminUserInfo.merchantAdminId
+                        },
+                        success:data=>{
+                            $scope.monthCount.monthSales = data.result;
+                            resolve();
+                        }
+                    });
+                })
+            },
+            getMonthSpends:()=>{
+                return new Promise((resolve,reject)=>{
+                    merchantService.merchantHttp({
+                        url:'/cqjjTrade/account/spend/monthSpendAccounts',
+                        type:'GET',
+                        data:{
+                            month: $scope.monthCount.month,
+                            adminId: $scope.adminUserInfo.merchantAdminId
+                        },
+                        success:data=>{
+                            $scope.monthCount.monthSpends = data.result;
+                            resolve();
+                        }
+                    });
+                })
+            }
+        }
+
+        $scope.monthCount.initData();
+
+
     });
-
-
-    function initProfitsChart(){
-
-        var option = {
-            xAxis: {
-                scale: true,
-                splitLine:{
-                    show:false
-                },
-                type: 'category',
-                data: ['一月', '二月', '三月', '四月', '五月']
-            },
-            yAxis: {
-                show : false,
-                type: 'value'
-            },
-            series: [{
-                data: [620, 932, 901, 934, 1290],
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                },
-                type: 'line',
-                smooth: false
-            }]
-        };
-        profitsChart.setOption(option);
-
-    }
-
-
-    function initSales(){
-
-        var option = {
-            title : {
-                text: '销售额统计',
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                data: ['已收款','未收款']
-
-            },
-            series : [{
-                radius : '50%',
-                label: {
-                    normal: {
-                        formatter: '{b}:{d}% ',
-                    }
-                },
-                name: '姓名',
-                type: 'pie',
-                data: [{
-                    name:'已收款',
-                    value:'100'
-                },{
-                    name:'未收款',
-                    value:'200'
-                }]
-
-            }
-            ]
-        };
-
-        salesChart.setOption(option);
-    }
-
-
-    function initSpendss(){
-
-        var option = {
-            title : {
-                text: '支出统计',
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                vertical: 'vertical',
-                left: 'left',
-                data: ['家具收购','搬运费', '其它']
-
-            },
-            series : [{
-                radius : '50%',
-                name: '类型',
-                label: {
-                    normal: {
-                        formatter: '{b}:{d}% ',
-                    }
-                },
-                type: 'pie',
-                data: [{
-                    name:'家具收购',
-                    value:'100'
-                },{
-                    name:'搬运费',
-                    value:'200'
-                },{
-                    name:'其它',
-                    value:'200'
-                }]
-
-            }
-            ]
-        };
-
-        spendsChart.setOption(option);
-    }
 
 
 

@@ -30,6 +30,7 @@ router.get('/init', function (req, res, next) {
 });
 
 router.get('/smsCode', function (req, res, next) {
+    console.log("发送短信------------");
     return Promise.try(function () {
         return cRequest.sendRequest(req, res, {
             url: constant.BASE_PATH + "/sysAdmin/sms/sendSMS/"+ req.query.phone,
